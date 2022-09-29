@@ -1,4 +1,8 @@
-setwd("C:/Users/alann/Desktop/Statistical programming")
+# Karman Singh s1936373
+# Viren Sirwani Mulani s1949143
+# Alannah Hounat s2434943
+
+##setwd("C:/Users/alann/Desktop/Statistical programming")
 
 a <- scan("pg10.txt",what="character",skip=104) ## skip contents
 n <- length(a)
