@@ -9,23 +9,17 @@ n <- length(a)
 a <- a[-((n-2886):n)] ## strip license
 a <- a[-grep("[0123456789]:[0123456789]",a)] ## strip out verse numbers
 
-#split the string wrt words and punctuation
-#asplit_punct <-strsplit(a,"[[:space:]]|(?=[.!?:;,])",perl=TRUE)
 
 #function to split given punctuation mark from a given list of words
 split_punct <- function(words, punc_mark) {
-  #finds index of given puctuation mark
-  #index <- grep(punc_mark, words, fixed = TRUE)
-  #removes the punctuation mark from all words in the list
+  #string concatenating white space and punctuation mark  
   space_punc <- paste("", punc_mark)
+  #puts a space in between the word and the punctuation mark 
   words <- gsub(punc_mark, space_punc, words, fixed = TRUE)
   
-  #pastes punctuation mark after a space at indices found above
-  #words[index] = paste(words[index], punc_mark, sep=" ")
-  
-  #list of words collapsed to a string
+  #list of words collapsed to a string separated by a space
   words = paste(words, collapse = " ")
-  #converts collapsed string back to list of words
+  #converts collapsed string back to list of words 
   words = strsplit(words, " ")[[1]]
   
   return(words)
