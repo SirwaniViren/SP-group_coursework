@@ -9,7 +9,6 @@ n <- length(a)
 a <- a[-((n-2886):n)] ## strip license
 a <- a[-grep("[0123456789]:[0123456789]",a)] ## strip out verse numbers
 
-
 #function to split given punctuation mark from a given list of words
 split_punct <- function(words, punc_mark) {
   #string concatenating white space and punctuation mark  
