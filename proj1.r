@@ -79,12 +79,31 @@ for (count in freq) {
   j <- j + 1
 }
 
-#Q7
+#7
 #a)
-common<-match(a_lower,b)
+text_index <- match(a_lower, b)
 
 #b)
-matrix<-cbind(common,common+1,common+2)
+
+#function to shift left common word vector by certain amount and then
+#a specified amount is removed from the tail of the new vector
+shift_left_and_cut <- function(vector, shift_amount, cut_amount){
+  n <- length(vector)
+  new_vector <- rep(NA, n)
+  new_vector[1:(n-abs(shift_amount))] <- vector[(1+abs(shift_amount)):n]
+  new_vector_cut <- new_vector[1:(length(new_vector)-cut_amount)]
+  return(new_vector_cut)
+}
+
+matrix_col1 <- text_index[1:(length(text_index)-2)]
+matrix_col2 <- shift_left_and_cut(text_index,1,2)
+matrix_col3 <- shift_left_and_cut(text_index,2,2)
+
+T_matrix <- cbind(matrix_col1, matrix_col2, matrix_col3)
 
 #c)
-triplets<-matrix[rowSums(is.na(matrix))==0,]
+#the new matrix now only contains rows without NA. They way this was done was
+# by counting how many NA's were in each row, keeping only the ones with none
+T_matrix_new <- T_matrix[rowSums(is.na(T_matrix))==0, ]
+
+#d)
