@@ -4,7 +4,7 @@
 
 #3
 #setwd("C:/UNI/4th Year/1st Sem/Statistical Programming/SP-group_coursework")
-setwd("C:/Users/alann/Desktop/Statistical programming")
+#setwd("C:/Users/alann/Desktop/Statistical programming")
 
 a <- scan("pg10.txt",what="character",skip=104) ## skip contents
 n <- length(a)
@@ -99,11 +99,34 @@ matrix_col1 <- text_index[1:(length(text_index)-2)]
 matrix_col2 <- shift_left_and_cut(text_index,1,2)
 matrix_col3 <- shift_left_and_cut(text_index,2,2)
 
-T_matrix <- cbind(matrix_col1, matrix_col2, matrix_col3)
+matrix <- cbind(matrix_col1, matrix_col2, matrix_col3)
 
 #c)
 #the new matrix now only contains rows without NA. They way this was done was
 # by counting how many NA's were in each row, keeping only the ones with none
-T_matrix_new <- T_matrix[rowSums(is.na(T_matrix))==0, ]
+matrix_new <- matrix[rowSums(is.na(matrix))==0, ]
 
 #d)
+b_n <- length(b)
+T <- array(c(0,0), dim=c(b_n, b_n, b_n))
+for (i in 1:nrow(matrix_new)){
+  T[matrix_new[i,1],matrix_new[i,2],matrix_new[i,3]] = 
+    T[matrix_new[i,1],matrix_new[i,2],matrix_new[i,3]] + 1
+}
+
+#e)
+
+
+#f)
+A <- array(c(0,0), dim=c(b_n, b_n))
+for (i in 1:nrow(matrix_new)){
+  A[matrix_new[i,1],matrix_new[i,3]] = 
+    A[matrix_new[i,1],matrix_new[i,3]] + 1 
+}
+
+S <- rep(0, b_n)
+for (i in 1:nrow(matrix_new)){
+  S[matrix_new[i]] = S[matrix_new[i]] + 1
+}
+  
+#8
