@@ -126,7 +126,25 @@ for (i in 1:nrow(matrix_new)){
 
 S <- rep(0, b_n)
 for (i in 1:nrow(matrix_new)){
-  S[matrix_new[i]] = S[matrix_new[i]] + 1
+  S[matrix_new[i,1]] = S[matrix_new[i,1]] + 1
 }
   
 #8
+sim_text <- rep("", 50)
+sim_text[1] <- sample(b, size = 1, prob = S)
+
+if (sample(b, size = 1, prob = A[match(sim_text[1], b), ]) != 0){
+  sim_text[2] <- sample(b, size = 1, prob = A[match(sim_text[1], b), ])
+}else sim_text[2] <- sample(b, size = 1, prob = S)
+
+for (i in 3:length(sim_text)){
+  if(sample(b, size=1, prob = T[match(sim_text[i-2], b), match(sim_text[i-1], b), ]) != 0){
+    sim_text[i] <- sample(b, size=1, prob = T[match(sim_text[i-2], b), match(sim_text[i-1], b), ])
+  }else if (sample(b, size = 1, prob = A[match(sim_text[i-2], b), ]) != 0){
+    sim_text[i] <- sample(b, size = 1, prob = A[match(sim_text[i-2], b), ])
+  } else sim_text[i] <- sample(b, size = 1, prob = S)
+
+}
+
+#9
+
