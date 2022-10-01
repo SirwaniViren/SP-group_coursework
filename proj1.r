@@ -89,16 +89,21 @@ text_index <- match(a_lower, b)
 #a specified amount is removed from the tail of the new vector
 shift_left_and_cut <- function(vector, shift_amount, cut_amount){
   n <- length(vector)
+  #create NA vector of length n
   new_vector <- rep(NA, n)
+  # shift the original vector by the amount specified
   new_vector[1:(n-abs(shift_amount))] <- vector[(1+abs(shift_amount)):n]
+  # remove entries from the end of the new vector to maintain same size
   new_vector_cut <- new_vector[1:(length(new_vector)-cut_amount)]
   return(new_vector_cut)
 }
 
+# columns for matrix, names matrix_coli for i = 1,2,3 
 matrix_col1 <- text_index[1:(length(text_index)-2)]
 matrix_col2 <- shift_left_and_cut(text_index,1,2)
 matrix_col3 <- shift_left_and_cut(text_index,2,2)
 
+# bind the above vectors into desired matrix
 matrix <- cbind(matrix_col1, matrix_col2, matrix_col3)
 
 #c)
@@ -108,43 +113,66 @@ matrix_new <- matrix[rowSums(is.na(matrix))==0, ]
 
 #d)
 b_n <- length(b)
+# 3D array initialized to all 0s
 T <- array(c(0,0), dim=c(b_n, b_n, b_n))
+# loop to go through every row of matrix_new and adding 1 to the corresponding
+# slot in the array
 for (i in 1:nrow(matrix_new)){
   T[matrix_new[i,1],matrix_new[i,2],matrix_new[i,3]] = 
     T[matrix_new[i,1],matrix_new[i,2],matrix_new[i,3]] + 1
 }
 
 #e)
-
+# not sure if we have to do anything here
 
 #f)
+
+# matrix A to fill in with probabilities
 A <- array(c(0,0), dim=c(b_n, b_n))
 for (i in 1:nrow(matrix_new)){
   A[matrix_new[i,1],matrix_new[i,3]] = 
     A[matrix_new[i,1],matrix_new[i,3]] + 1 
 }
-
+ # vector S to fill in with probabilities
 S <- rep(0, b_n)
 for (i in 1:nrow(matrix_new)){
   S[matrix_new[i,1]] = S[matrix_new[i,1]] + 1
 }
   
 #8
-sim_text <- rep("", 50)
+num_words <- 50
+sim_text <- rep("", num_words)
+# randomly pick a word from b, based on the probabilities in S
 sim_text[1] <- sample(b, size = 1, prob = S)
 
+# if statement used for second word as we have to fall back to S if the sample 
+# word does not follow the first one
 if (sample(b, size = 1, prob = A[match(sim_text[1], b), ]) != 0){
   sim_text[2] <- sample(b, size = 1, prob = A[match(sim_text[1], b), ])
 }else sim_text[2] <- sample(b, size = 1, prob = S)
 
+# for loop to iterate to fill in remaining words
 for (i in 3:length(sim_text)){
+  # check if there are more than 0 occurrences of the sampled word coming after the
+  # previous one
   if(sample(b, size=1, prob = T[match(sim_text[i-2], b), match(sim_text[i-1], b), ]) != 0){
     sim_text[i] <- sample(b, size=1, prob = T[match(sim_text[i-2], b), match(sim_text[i-1], b), ])
+  # fall back to A if word does not follow the pair b_i, b_k
   }else if (sample(b, size = 1, prob = A[match(sim_text[i-2], b), ]) != 0){
     sim_text[i] <- sample(b, size = 1, prob = A[match(sim_text[i-2], b), ])
+  # fall back to S
   } else sim_text[i] <- sample(b, size = 1, prob = S)
 
 }
 
 #9
+# sim_text_S = sample(b, size = 50, replace = TRUE, prob = S)
+
+# same thing as question 8 but only relying on vector S
+sim_text_S <- rep("", num_words)
+for (i in 1:length(sim_text)){
+  sim_text_S[i] = sample(b, size = 1, prob = S)
+}
+
+#10
 
