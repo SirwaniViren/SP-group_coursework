@@ -3,7 +3,8 @@
 # Alannah Hounat s2434943
 
 #3
-setwd("C:/UNI/4th Year/1st Sem/Statistical Programming/SP-group_coursework")
+#setwd("C:/UNI/4th Year/1st Sem/Statistical Programming/SP-group_coursework")
+setwd("C:/Users/alann/Desktop/Statistical programming")
 
 a <- scan("pg10.txt",what="character",skip=104) ## skip contents
 n <- length(a)
@@ -77,3 +78,13 @@ for (count in freq) {
   }
   j <- j + 1
 }
+
+#Q7
+#a)
+common<-match(a_lower,b)
+
+#b)
+matrix<-cbind(common,common+1,common+2)
+
+#c)
+triplets<-matrix[rowSums(is.na(matrix))==0,]
