@@ -34,7 +34,6 @@ a <- split_punct(a, ";")
 a <- split_punct(a, "!")
 a <- split_punct(a, ":")
 a <- split_punct(a, "?")
-a <- split_punct(a, "’")
 
 #6
 #a)
