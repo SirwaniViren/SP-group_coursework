@@ -4,7 +4,7 @@
 
 #3
 #setwd("C:/UNI/4th Year/1st Sem/Statistical Programming/SP-group_coursework")
-#setwd("C:/Users/alann/Desktop/Statistical programming")
+setwd("C:/Users/alann/Desktop/Statistical programming")
 
 a <- scan("pg10.txt",what="character",skip=104) ## skip contents
 n <- length(a)
@@ -34,9 +34,7 @@ a <- split_punct(a, ";")
 a <- split_punct(a, "!")
 a <- split_punct(a, ":")
 a <- split_punct(a, "?")
-
-# #removes all punctuation
-# a2<-gsub("[^[:alnum:][:space:]']", "", a)
+a <- split_punct(a, "’")
 
 #6
 #a)
@@ -45,7 +43,6 @@ a_unique<-unique(a_lower)
 
 #b)
 index <- match(a_lower, a_unique)
-#match<-match(c(a_lower),c(unique(a_lower)))
 
 #c)
 freq<-tabulate(index)
@@ -125,6 +122,7 @@ for (i in 1:nrow(matrix_new)){
 #e)
 # not sure if we have to do anything here
 
+
 #f)
 
 # matrix A to fill in with probabilities
@@ -175,4 +173,6 @@ for (i in 1:length(sim_text)){
 }
 
 #10
+
+
 
