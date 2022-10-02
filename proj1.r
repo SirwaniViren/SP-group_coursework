@@ -52,6 +52,7 @@ threshold <- 5
 #while loop to check the threshold limit such that m ~ 500
 while (length(freq[freq>threshold]) >= m) {
   over_thresh <- threshold
+  #incrementing theshold value
   threshold <- threshold + 5
 }
 under_thresh <- threshold
@@ -59,7 +60,6 @@ under_thresh <- threshold
 #equates threshold to a value(either threshold that makes m >= 500 or m < 500) 
 #such that m is closest to 500.
 threshold <- if ((length(freq[freq>over_thresh]) - m) <= (m - length(freq[freq>under_thresh]))) over_thresh else under_thresh
-cat(threshold)
 
 #e)
 j <- 1
@@ -69,7 +69,7 @@ b <- c()
 for (count in freq) {
   #checks if current element of freq vector is >= threshold found
   if (count >= threshold) {
-    #if it is, append the word in vector b
+    #if it is, append the word to vector b
     b = append(b, a_unique[j])
   }
   j <- j + 1
@@ -147,9 +147,10 @@ for (i in 3:length(sim_text)){
   } else sim_text[i] <- sample(b, size = 1, prob = S)
 }
 
-#9
-# sim_text_S = sample(b, size = 50, replace = TRUE, prob = S)
+#printing the text
+cat(sim_text)
 
+#9
 # same thing as question 8 but only relying on vector S
 sim_text_S <- rep("", num_words)
 for (i in 1:length(sim_text)){
@@ -188,3 +189,7 @@ for (i in 1:length(sim_text))
     sim_text_S[i] = result
   }
 }
+
+#NOTE
+#for q10 rather than capitalising every word that's capitalised in main text,
+# shouldn't we capitalise words that are capitalised the most in main text
