@@ -45,7 +45,6 @@ a_unique<-unique(a_lower)
 
 #b)
 index <- match(a_lower, a_unique)
-#match<-match(c(a_lower),c(unique(a_lower)))
 
 #c)
 freq<-tabulate(index)
@@ -84,31 +83,17 @@ for (count in freq) {
 text_index <- match(a_lower, b)
 
 #b)
-
-#function to shift left common word vector by certain amount and then
-#a specified amount is removed from the tail of the new vector
-shift_left_and_cut <- function(vector, shift_amount, cut_amount){
-  n <- length(vector)
-  #create NA vector of length n
-  new_vector <- rep(NA, n)
-  # shift the original vector by the amount specified
-  new_vector[1:(n-abs(shift_amount))] <- vector[(1+abs(shift_amount)):n]
-  # remove entries from the end of the new vector to maintain same size
-  new_vector_cut <- new_vector[1:(length(new_vector)-cut_amount)]
-  return(new_vector_cut)
-}
-
-# columns for matrix, names matrix_coli for i = 1,2,3 
+# columns for matrix
 matrix_col1 <- text_index[1:(length(text_index)-2)]
-matrix_col2 <- shift_left_and_cut(text_index,1,2)
-matrix_col3 <- shift_left_and_cut(text_index,2,2)
+matrix_col2 <- text_index[2:(length(text_index)-1)]
+matrix_col3 <- text_index[3:(length(text_index))]
 
 # bind the above vectors into desired matrix
 matrix <- cbind(matrix_col1, matrix_col2, matrix_col3)
 
 #c)
-#the new matrix now only contains rows without NA. They way this was done was
-# by counting how many NA's were in each row, keeping only the ones with none
+#the new matrix now only contains rows without NA. The way this was done was
+#by counting how many NA's were in each row, keeping only the ones with none
 matrix_new <- matrix[rowSums(is.na(matrix))==0, ]
 
 #d)
@@ -162,7 +147,6 @@ for (i in 3:length(sim_text)){
     sim_text[i] <- sample(b, size = 1, prob = A[match(sim_text[i-2], b), ])
   # fall back to S
   } else sim_text[i] <- sample(b, size = 1, prob = S)
-
 }
 
 #9
