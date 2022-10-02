@@ -4,7 +4,7 @@
 
 #3
 #setwd("C:/UNI/4th Year/1st Sem/Statistical Programming/SP-group_coursework")
-setwd("C:/Users/alann/Desktop/Statistical programming")
+#setwd("C:/Users/alann/Desktop/Statistical programming")
 
 a <- scan("pg10.txt",what="character",skip=104) ## skip contents
 n <- length(a)
@@ -179,19 +179,27 @@ a_unique_caps<-unique(a)
 difference<-setdiff(a_unique_caps,a_unique)
 difference_lower<-tolower(difference)
 
-#An unfinished attempt at Q10. 
+#10
 #if the word exists in the uppercase we want to replace the lower case version of it
 #within the text. So we find each instance where its a lowercase and replace
 #it with its uppercase
 
-for (i in 1:length(sim_text)){
-  result<-sample(b, size = 1, prob = S)
-  if result (is in diff_lower set)
-    sim_text_s[i]=a_unique_caps
-  else
-    sim_text_s[i]=result
+for (i in 1:length(sim_text))
+{
+  result<-sample(b, size =1, prob = S)
+  #find index of lowercase words
+  lowerIndex = match(result,difference_lower)[1]
+  
+  #if lowerindex is a valid number => there exists a capital number
+  if (!is.na(lowerIndex)) 
+  {
+    #find the uppercase word in 'difference' using the same index
+    sim_text_S[i]= difference[lowerIndex]
+  } 
+  #else if lowerindex is NOT a valid number =/> there DOES NOT exist a capital number
+  else 
+  {
+    #else leave it alone
+    sim_text_S[i] = result
+  }
 }
-
-
-
-
