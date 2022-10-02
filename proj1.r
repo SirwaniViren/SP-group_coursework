@@ -172,6 +172,26 @@ for (i in 1:length(sim_text)){
 }
 
 #10
+#find all the unique words, ie including those with capitals
+a_unique_caps<-unique(a)
+
+#finding the difference between two vectors to find the capitalised words
+difference<-setdiff(a_unique_caps,a_unique)
+difference_lower<-tolower(difference)
+
+#An unfinished attempt at Q10. 
+#if the word exists in the uppercase we want to replace the lower case version of it
+#within the text. So we find each instance where its a lowercase and replace
+#it with its uppercase
+
+for (i in 1:length(sim_text)){
+  result<-sample(b, size = 1, prob = S)
+  if result (is in diff_lower set)
+    sim_text_s[i]=a_unique_caps
+  else
+    sim_text_s[i]=result
+}
+
 
 
 
