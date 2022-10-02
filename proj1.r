@@ -35,9 +35,6 @@ a <- split_punct(a, "!")
 a <- split_punct(a, ":")
 a <- split_punct(a, "?")
 
-# #removes all punctuation
-# a2<-gsub("[^[:alnum:][:space:]']", "", a)
-
 #6
 #a)
 a_lower<-tolower(a)
@@ -110,6 +107,7 @@ for (i in 1:nrow(matrix_new)){
 #e)
 # not sure if we have to do anything here
 
+
 #f)
 
 # matrix A to fill in with probabilities
@@ -159,4 +157,34 @@ for (i in 1:length(sim_text)){
 }
 
 #10
+#find all the unique words, ie including those with capitals
+a_unique_caps<-unique(a)
 
+#finding the difference between two vectors to find the capitalised words
+difference<-setdiff(a_unique_caps,a_unique)
+difference_lower<-tolower(difference)
+
+#10
+#if the word exists in the uppercase we want to replace the lower case version of it
+#within the text. So we find each instance where its a lowercase and replace
+#it with its uppercase
+
+for (i in 1:length(sim_text))
+{
+  result<-sample(b, size =1, prob = S)
+  #find index of lowercase words
+  lowerIndex = match(result,difference_lower)[1]
+  
+  #if lowerindex is a valid number => there exists a capital number
+  if (!is.na(lowerIndex)) 
+  {
+    #find the uppercase word in 'difference' using the same index
+    sim_text_S[i]= difference[lowerIndex]
+  } 
+  #else if lowerindex is NOT a valid number =/> there DOES NOT exist a capital number
+  else 
+  {
+    #else leave it alone
+    sim_text_S[i] = result
+  }
+}
