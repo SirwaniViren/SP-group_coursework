@@ -4,7 +4,7 @@
 
 #3
 #setwd("C:/UNI/4th Year/1st Sem/Statistical Programming/SP-group_coursework")
-#setwd("C:/Users/alann/Desktop/Statistical programming")
+setwd("C:/Users/alann/Desktop/Statistical programming")
 
 a <- scan("pg10.txt",what="character",skip=104) ## skip contents
 n <- length(a)
@@ -178,7 +178,7 @@ difference<-setdiff(a_unique_caps,a_unique)
 cap_index<-match(a,difference)
 cap_freq<-tabulate(cap_index)
 
-#next part is essentially the same as Q6d and e with some modifications in variable names
+#next part is essentially the same as Q6d & e with some modifications in variable names
 #using the same m and threshold as earlier 
 
 #check threshold limit
@@ -208,8 +208,7 @@ for (count in cap_freq)
 }
 
 #will need the lower case of b_cap so we can compare them with our sample.
-#if a word matches in b_low and result2 this means it'll be a word we need to replace with its capitalised version
-
+#if a word matches in b_low and result2 this means it will be a word we need to replace with its capitalised version
 b_low<-tolower(b_cap)
 
 for (i in 1:length(sim_text))
@@ -222,7 +221,7 @@ for (i in 1:length(sim_text))
   #if lowerindex is a valid number => there exists a capital
   if (!is.na(lowerindex)) 
   {
-    #find the uppercase word in 'difference' using the same index
+    #find the uppercase word in 'b_cap' using the same index
     sim_text_S[i]= b_cap[lowerindex]
   } 
   #else if lowerindex is NOT a valid number =/> there DOES NOT exist a capital number
@@ -232,4 +231,3 @@ for (i in 1:length(sim_text))
     sim_text_S[i] = result2
   }
 }
-
