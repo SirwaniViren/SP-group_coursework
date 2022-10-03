@@ -35,6 +35,7 @@ a <- split_punct(a, "!")
 a <- split_punct(a, ":")
 a <- split_punct(a, "?")
 
+
 #6
 #a)
 a_lower<-tolower(a)
@@ -163,33 +164,76 @@ a_unique_caps<-unique(a)
 
 #finding the difference between two vectors to find the capitalised words
 difference<-setdiff(a_unique_caps,a_unique)
-difference_lower<-tolower(difference)
 
-#10
+#First find how often each capitalised word shows up 
+cap_index<-match(a,a_unique_caps)
+cap_freq<-tabulate(cap_index)
+
+#next part is essentially the same as Q6d and e with some modifications in variable names
+#using the same m and threshold as earlier 
+
+#check threshold limit
+while (length(cap_freq[cap_freq>threshold]) >= m) 
+{
+  over_thresh <- threshold
+  threshold <- threshold + 5
+}
+under_thresh <- threshold
+
+#ensures m is close to 500
+threshold <- if ((length(cap_freq[cap_freq>over_thresh]) - m) <= (m - length(cap_freq[cap_freq>under_thresh]))) over_thresh else under_thresh
+
+k <- 1
+#empty vector
+b_cap <- c()
+#if a words has frequency over the threshold within the capital words
+#add it to a new vector b_cap
+for (count in cap_freq) 
+{
+  #checks if current element of cap_freq>= the current threshold 
+  if (count >= threshold) 
+    {
+    #add to b_cap
+    b_cap = append(b_cap, difference[k])
+    }
+  k <- k + 1
+}
+
 #if the word exists in the uppercase we want to replace the lower case version of it
 #within the text. So we find each instance where its a lowercase and replace
 #it with its uppercase
 
+b_low<-na.omit(tolower(b_cap))#perhaps this is causing issue - noted below
+#check for myself edit out later
+print(b_low)
+
 for (i in 1:length(sim_text))
 {
-  result<-sample(b, size =1, prob = S)
-  #find index of lowercase words
-  lowerIndex = match(result,difference_lower)[1]
+  result2<-sample(b, size =1,prob = S)
+  print(result2)
+  #now we want to compare our sample with b_cap as this is where the most commonly occuring 
+  #Capital words are stored
+  lowerindex = match(result2,b_low)[1]
   
   #if lowerindex is a valid number => there exists a capital number
-  if (!is.na(lowerIndex)) 
+  if (!is.na(lowerindex)) 
   {
     #find the uppercase word in 'difference' using the same index
-    sim_text_S[i]= difference[lowerIndex]
+    sim_text_S[i]= b_cap[lowerindex]
   } 
   #else if lowerindex is NOT a valid number =/> there DOES NOT exist a capital number
   else 
   {
     #else leave it alone
-    sim_text_S[i] = result
+    sim_text_S[i] = result2
   }
 }
+
 
 #NOTE
 #for q10 rather than capitalising every word that's capitalised in main text,
 # shouldn't we capitalise words that are capitalised the most in main text
+
+#Think I did Q10 better now please check over it and let me know of any constructive criticism :]
+#although i noticed in one output "Jesus" wasnt capitalised even though it would be a commonly
+#capitalised word perhaps due to something with line 208 i'll look at this again later this evening and tidy it up
