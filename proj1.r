@@ -236,5 +236,11 @@ for (i in 1:length(sim_text_C))
 cat(sim_text_C)
 
 #NOTE
-#Alannah, do you have any way we can contact(WhatsApp or something) you 
+#I just went through this piazza post(https://piazza.com/class/l5cddxfxsvt3lh/post/21) 
+#about q10, the instructor said we need to capitalise those words that are capitalised 
+#more than 50% of the times in the main text. For eg., if the word 'the/The' 
+#appears 1000 times in the main text, 'the' will only be capitalised in 
+#sim_text_C if 'The' appears >500 times in the main text.
+
+#Alannah, do you have any way we can contact you(WhatsApp or something)
 #other than leaving these notes. That'd be better I think :)
