@@ -4,14 +4,14 @@
 
 #3
 #setwd("C:/UNI/4th Year/1st Sem/Statistical Programming/SP-group_coursework")
-setwd("C:/Users/alann/Desktop/Statistical programming")
+#setwd("C:/Users/alann/Desktop/Statistical programming")
 
 a <- scan("pg10.txt",what="character",skip=104) ## skip contents
 n <- length(a)
 a <- a[-((n-2886):n)] ## strip license
 a <- a[-grep("[0123456789]:[0123456789]",a)] ## strip out verse numbers
 
-#4
+#             <-------------Q4------------->
 #function to split given punctuation mark from a given list of words
 split_punct <- function(words, punc_mark) {
   #string concatenating white space and punctuation mark  
@@ -27,7 +27,7 @@ split_punct <- function(words, punc_mark) {
   return(words)
 }
 
-#5
+#             <-------------Q5------------->
 a <- split_punct(a, ",")
 a <- split_punct(a, ".")
 a <- split_punct(a, ";")
@@ -36,7 +36,7 @@ a <- split_punct(a, ":")
 a <- split_punct(a, "?")
 
 
-#6
+#             <-------------Q6------------->
 #a)
 a_lower<-tolower(a)
 a_unique<-unique(a_lower)
@@ -76,7 +76,7 @@ for (count in freq) {
   j <- j + 1
 }
 
-#7
+#             <-------------Q7------------->
 #a)
 text_index <- match(a_lower, b)
 
@@ -110,7 +110,6 @@ for (i in 1:nrow(matrix_new)){
 
 
 #f)
-
 # matrix A to fill in with probabilities
 A <- array(c(0,0), dim=c(b_n, b_n))
 for (i in 1:nrow(matrix_new)){
@@ -123,7 +122,7 @@ for (i in 1:nrow(matrix_new)){
   S[matrix_new[i,1]] = S[matrix_new[i,1]] + 1
 }
   
-#8
+#             <-------------Q8------------->
 num_words <- 50
 sim_text <- rep("", num_words)
 # randomly pick a word from b, based on the probabilities in S
@@ -156,7 +155,7 @@ for (i in 3:length(sim_text)){
 #printing the text
 cat(sim_text)
 
-#9
+#             <-------------Q9------------->
 # same thing as question 8 but only relying on vector S
 sim_text_S <- rep("", num_words)
 for (i in 1:length(sim_text)){
@@ -167,7 +166,7 @@ for (i in 1:length(sim_text)){
 cat(sim_text_S)
 
 
-#10
+#             <-------------Q10------------->
 #find all the unique words, ie including those with capitals
 a_unique_caps<-unique(a)
 
@@ -200,10 +199,10 @@ for (count in cap_freq)
 {
   #checks if current element of cap_freq>= the current threshold 
   if (count >= threshold) 
-    {
+  {
     #add to b_cap
     b_cap = append(b_cap, difference[k])
-    }
+  }
   k <- k + 1
 }
 
@@ -211,7 +210,8 @@ for (count in cap_freq)
 #if a word matches in b_low and result2 this means it will be a word we need to replace with its capitalised version
 b_low<-tolower(b_cap)
 
-for (i in 1:length(sim_text))
+sim_text_C <- rep("", num_words)
+for (i in 1:length(sim_text_C))
 {
   result2<-sample(b, size =1,prob = S)
   #now we want to compare our sample with b_cap as this is where the most commonly occuring 
@@ -222,12 +222,19 @@ for (i in 1:length(sim_text))
   if (!is.na(lowerindex)) 
   {
     #find the uppercase word in 'b_cap' using the same index
-    sim_text_S[i]= b_cap[lowerindex]
+    sim_text_C[i]= b_cap[lowerindex]
   } 
   #else if lowerindex is NOT a valid number =/> there DOES NOT exist a capital number
   else 
   {
     #else leave it alone
-    sim_text_S[i] = result2
+    sim_text_C[i] = result2
   }
 }
+
+#printing the text
+cat(sim_text_C)
+
+#NOTE
+#Alannah, do you have any way we can contact(WhatsApp or something) you 
+#other than leaving these notes. That'd be better I think :)
