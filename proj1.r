@@ -130,19 +130,24 @@ sim_text <- rep("", num_words)
 sim_text[1] <- sample(b, size = 1, prob = S)
 
 # if statement used for second word as we have to fall back to S if the sample 
-# word does not follow the first one
-if (sample(b, size = 1, prob = A[match(sim_text[1], b), ]) != 0){
+# word does not follow the first one. We also check if there are any non-zero 
+# values
+if (sum(A[match(sim_text[1], b), ] != 0) != 0 && 
+     sample(b, size = 1, prob = A[match(sim_text[1], b), ]) != 0){
   sim_text[2] <- sample(b, size = 1, prob = A[match(sim_text[1], b), ])
 }else sim_text[2] <- sample(b, size = 1, prob = S)
 
 # for loop to iterate to fill in remaining words
 for (i in 3:length(sim_text)){
   # check if there are more than 0 occurrences of the sampled word coming after the
-  # previous one
-  if(sample(b, size=1, prob = T[match(sim_text[i-2], b), match(sim_text[i-1], b), ]) != 0){
+  # previous one. We also check if there are any non-zero elements in the vector, if not, then
+  # we fall back to A.
+  if(sum(T[match(sim_text[i-2], b), match(sim_text[i-1], b), ] != 0) != 0 && 
+     sample(b, size=1, prob = T[match(sim_text[i-2], b), match(sim_text[i-1], b), ]) != 0){
     sim_text[i] <- sample(b, size=1, prob = T[match(sim_text[i-2], b), match(sim_text[i-1], b), ])
   # fall back to A if word does not follow the pair b_i, b_k
-  }else if (sample(b, size = 1, prob = A[match(sim_text[i-2], b), ]) != 0){
+  }else if (sum(A[match(sim_text[i-2], b), ] != 0) != 0 &&
+            sample(b, size = 1, prob = A[match(sim_text[i-2], b), ]) != 0){
     sim_text[i] <- sample(b, size = 1, prob = A[match(sim_text[i-2], b), ])
   # fall back to S
   } else sim_text[i] <- sample(b, size = 1, prob = S)
@@ -157,6 +162,9 @@ sim_text_S <- rep("", num_words)
 for (i in 1:length(sim_text)){
   sim_text_S[i] = sample(b, size = 1, prob = S)
 }
+
+# printing the text
+cat(sim_text_S)
 
 #10
 #find all the unique words, ie including those with capitals
