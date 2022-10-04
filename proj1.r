@@ -244,3 +244,5 @@ cat(sim_text_C)
 
 #Alannah, do you have any way we can contact you(WhatsApp or something)
 #other than leaving these notes. That'd be better I think :)
+
+#Ah, I didnt see that post thanks for letting me know! Thats probably a good idea! my number is 00353894045822 :]
