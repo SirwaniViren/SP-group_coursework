@@ -242,7 +242,4 @@ cat(sim_text_C)
 #appears 1000 times in the main text, 'the' will only be capitalised in 
 #sim_text_C if 'The' appears >500 times in the main text.
 
-#Alannah, do you have any way we can contact you(WhatsApp or something)
-#other than leaving these notes. That'd be better I think :)
-
 #Ah, I didnt see that post thanks for letting me know! Thats probably a good idea! my number is 00353894045822 :]
