@@ -4,7 +4,7 @@
 
 #3
 #setwd("C:/UNI/4th Year/1st Sem/Statistical Programming/SP-group_coursework")
-#setwd("C:/Users/alann/Desktop/Statistical programming")
+setwd("C:/Users/alann/Desktop/Statistical programming")
 
 a <- scan("pg10.txt",what="character",skip=104) ## skip contents
 n <- length(a)
@@ -167,44 +167,45 @@ cat(sim_text_S)
 
 
 #             <-------------Q10------------->
-#find all the unique words, ie including those with capitals
+#find all the unique words, ie including those with capitals and without
 a_unique_caps<-unique(a)
 
-#finding the difference between two vectors to find the capitalised words
+#finding the difference between the two vectors to find just the capitalised words
 difference<-setdiff(a_unique_caps,a_unique)
 
-#First find how often each capitalised word shows up and their index
+#find index and frequency of each capitalised word 
 cap_index<-match(a,difference)
-cap_freq<-tabulate(cap_index)
+cap_freq<-tabulate(cap_index)#4651
 
-#next part is essentially the same as Q6d & e with some modifications in variable names
-#using the same m and threshold as earlier 
+#lowercase the difference between the two vectors
+low_difference<-tolower(difference)#4651
 
-#check threshold limit
-while (length(cap_freq[cap_freq>threshold]) >= m) 
-{
-  over_thresh <- threshold
-  threshold <- threshold + 5
-}
-under_thresh <- threshold
+#now find how often all words show up in the text in general (in terms of lower case so we dont get dupes)
+total<-match(a_lower,low_difference)
+index_total<-tabulate(total)#4651
 
-#ensures m is close to m=500
-threshold <- if ((length(cap_freq[cap_freq>over_thresh]) - m) <= (m - length(cap_freq[cap_freq>under_thresh]))) over_thresh else under_thresh
 
 k <- 1
 #empty vector to hold capitalised words
 b_cap <- c()
-#if a words has frequency over the threshold limit add it to a new vector b_cap
-for (count in cap_freq) 
+
+#find the fraction of capitalised words/all words, this will be used to find decimal of how often the word shows up
+div<-(cap_freq/index_total)
+
+k <- 1
+#for every element in div
+for (i in 1:length(div))
 {
-  #checks if current element of cap_freq>= the current threshold 
-  if (count >= threshold) 
+  #if a words shows up more then 50% of the time add it to a new vector b_cap
+  if (div[i] > 0.5)
   {
-    #add to b_cap
-    b_cap = append(b_cap, difference[k])
+    b_cap<-append(b_cap,difference[k])
   }
-  k <- k + 1
+  k<-k+1
 }
+
+
+b_low<-tolower(b_cap)
 
 #will need the lower case of b_cap so we can compare them with our sample.
 #if a word matches in b_low and result2 this means it will be a word we need to replace with its capitalised version
@@ -234,12 +235,3 @@ for (i in 1:length(sim_text_C))
 
 #printing the text
 cat(sim_text_C)
-
-#NOTE
-#I just went through this piazza post(https://piazza.com/class/l5cddxfxsvt3lh/post/21) 
-#about q10, the instructor said we need to capitalise those words that are capitalised 
-#more than 50% of the times in the main text. For eg., if the word 'the/The' 
-#appears 1000 times in the main text, 'the' will only be capitalised in 
-#sim_text_C if 'The' appears >500 times in the main text.
-
-#Ah, I didnt see that post thanks for letting me know! Thats probably a good idea! my number is 00353894045822 :]
