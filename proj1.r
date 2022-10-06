@@ -183,9 +183,9 @@ unique_capitals<-unique(a)
 #the difference to find just the capitalised words
 difference<-setdiff(unique_capitals,a_unique)
 
-#index and frequency of each capitalised word 
+#index and frequency of capitalised words
 capital_index<-match(a,difference)
-capital_freq<-tabulate(capital_index)#4651
+capital_freq<-tabulate(capital_index)
 
 #lowercase the difference between the two vectors
 lower_difference<-tolower(difference)
@@ -194,9 +194,7 @@ lower_difference<-tolower(difference)
 total_words<-match(a_lower,lower_difference)
 index_total<-tabulate(total_words)
 
-
-k <- 1
-#empty vector to hold capitalised words b_cap -> capital_b
+#empty vector to hold capitalised words capital_b
 capital_b <- c()
 
 #the fraction of capitalised words/all words, this will be used to find decimal of how often the word shows up
@@ -214,7 +212,7 @@ for (i in 1:length(division))
   k<-k+1
 }
 
-
+#lowercase these words
 lower_b<-tolower(capital_b)
 
 #Function to reintroduce capitals letters to the beginning of a word
@@ -223,7 +221,7 @@ UpperCase <- function(x) {
   x
 }
 
-#Vector that contains the common elements of b and lower_b
+#Vector containing the common elements of b and lower_b
 b_common<-Reduce(intersect, list(b,lower_b))
 
 #reintroduce capital letters to words
@@ -232,17 +230,18 @@ common_capitals<-UpperCase(b_common)
 sim_text_C <- rep("", num_words)
 for (i in 1:length(sim_text_C))
 {
+  #random sample from simulation
   result<-sample(b, size =1,prob = S)
-  #now we want to compare our sample with b_common as this is where the most commonly occuring 
+  #now we want to compare our sample with b_common
   lowerIndex = match(result,b_common)[1]
   
-  #if lowerindex is a valid number => there exists a capital
+  #if lowerindex is a valid number there exists a capital
   if (!is.na(lowerIndex)) 
   {
-    #find the uppercase word in 'b_cap' using the same index
+    #find the uppercase word in 'common_capitals' using the same index
     sim_text_C[i]= common_capitals[lowerIndex]
   } 
-  #else if lowerindex is NOT a valid number =/> there DOES NOT exist a capital number
+  #if lowerindex is not a valid number there does not exist a capital word
   else 
   {
     #else leave it alone
