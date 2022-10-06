@@ -177,79 +177,76 @@ cat(sim_text_S)
 
 
 #             <-------------Q10------------->
-#find all the unique words, ie including those with capitals and without
-a_unique_caps<-unique(a)
+#all the unique words, including those with capitals and without
+unique_capitals<-unique(a)
 
-#finding the difference between the two vectors to find just the capitalised words
-difference<-setdiff(a_unique_caps,a_unique)
+#the difference to find just the capitalised words
+difference<-setdiff(unique_capitals,a_unique)
 
-#find index and frequency of each capitalised word 
-cap_index<-match(a,difference)
-cap_freq<-tabulate(cap_index)#4651
+#index and frequency of each capitalised word 
+capital_index<-match(a,difference)
+capital_freq<-tabulate(capital_index)#4651
 
 #lowercase the difference between the two vectors
-low_difference<-tolower(difference)#4651
+lower_difference<-tolower(difference)
 
-#now find how often all words show up in the text in general (in terms of lower case so we dont get dupes)
-total<-match(a_lower,low_difference)
-index_total<-tabulate(total)#4651
+#how often words show up in the text in general
+total_words<-match(a_lower,lower_difference)
+index_total<-tabulate(total_words)
 
-
-k <- 1
-#empty vector to hold capitalised words
-b_cap <- c() #3712
-
-#find the fraction of capitalised words/all words, this will be used to find decimal of how often the word shows up
-div<-(cap_freq/index_total)
 
 k <- 1
-#for every element in div
-for (i in 1:length(div))
+#empty vector to hold capitalised words b_cap -> capital_b
+capital_b <- c()
+
+#the fraction of capitalised words/all words, this will be used to find decimal of how often the word shows up
+division<-(capital_freq/index_total)
+
+k <- 1
+#for every element in division
+for (i in 1:length(division))
 {
-  #if a words shows up more then 50% of the time add it to a new vector b_cap
-  if (div[i] > 0.5)
+  #if a words shows up more then 50% of the time add it to a new vector capital_b
+  if (division[i] > 0.5)
   {
-    b_cap<-append(b_cap,difference[k])
+    capital_b<-append(capital_b,difference[k])
   }
   k<-k+1
 }
 
 
-b_low<-tolower(b_cap)#3712
+lower_b<-tolower(capital_b)
 
+#Function to reintroduce capitals letters to the beginning of a word
 UpperCase <- function(x) {
   substr(x, 1, 1) <- toupper(substr(x, 1, 1))
   x
 }
 
-new_b<-Reduce(intersect, list(b,b_low))
+#Vector that contains the common elements of b and lower_b
+b_common<-Reduce(intersect, list(b,lower_b))
 
-new_cap_b<-UpperCase(new_b)
-
-
-#will need the lower case of b_cap so we can compare them with our sample.
-#if a word matches in b_low and result2 this means it will be a word we need to replace with its capitalised version
-b_low<-tolower(b_cap)
+#reintroduce capital letters to words
+common_capitals<-UpperCase(b_common)
 
 sim_text_C <- rep("", num_words)
 for (i in 1:length(sim_text_C))
 {
-  result2<-sample(b, size =1,prob = S)
-  #now we want to compare our sample with b_cap as this is where the most commonly occuring 
-  #Capital words are stored
-  lowerindex = match(result2,new_b)[1]
+  result<-sample(b, size =1,prob = S)
+  #now we want to compare our sample with b_common as this is where the most commonly occuring 
+  lowerIndex = match(result,b_common)[1]
   
   #if lowerindex is a valid number => there exists a capital
-  if (!is.na(lowerindex)) 
+  if (!is.na(lowerIndex)) 
   {
     #find the uppercase word in 'b_cap' using the same index
-    sim_text_C[i]= new_cap_b[lowerindex]
+    sim_text_C[i]= common_capitals[lowerIndex]
   } 
   #else if lowerindex is NOT a valid number =/> there DOES NOT exist a capital number
   else 
   {
     #else leave it alone
-    sim_text_C[i] = result2
+    sim_text_C[i] = result
   }
 }
 
