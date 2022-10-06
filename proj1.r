@@ -4,7 +4,7 @@
 
 #3
 #setwd("C:/UNI/4th Year/1st Sem/Statistical Programming/SP-group_coursework")
-setwd("C:/Users/alann/Desktop/Statistical programming")
+#setwd("C:/Users/alann/Desktop/Statistical programming")
 
 a <- scan("pg10.txt",what="character",skip=104) ## skip contents
 n <- length(a)
