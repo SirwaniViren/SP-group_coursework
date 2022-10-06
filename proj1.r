@@ -2,26 +2,23 @@
 # Viren Sirwani Mulani s1949143
 # Alannah Hounat s2434943
 
-#3
-#setwd("C:/UNI/4th Year/1st Sem/Statistical Programming/SP-group_coursework")
-#setwd("C:/Users/alann/Desktop/Statistical programming")
-
+#             <-------------Q3------------->
 a <- scan("pg10.txt",what="character",skip=104) ## skip contents
 n <- length(a)
 a <- a[-((n-2886):n)] ## strip license
 a <- a[-grep("[0123456789]:[0123456789]",a)] ## strip out verse numbers
 
 #             <-------------Q4------------->
-#function to split given punctuation mark from a given list of words
+# function to split given punctuation mark from a given list of words
 split_punct <- function(words, punc_mark) {
-  #string concatenating white space and punctuation mark  
+  # string concatenating white space and punctuation mark  
   space_punc <- paste("", punc_mark)
-  #puts a space in between the word and the punctuation mark 
+  # puts a space in between the word and the punctuation mark 
   words <- gsub(punc_mark, space_punc, words, fixed = TRUE)
   
-  #list of words collapsed to a string separated by a space
+  # list of words collapsed to a string separated by a space
   words = paste(words, collapse = " ")
-  #converts collapsed string back to list of words 
+  # converts collapsed string back to list of words 
   words = strsplit(words, " ")[[1]]
   
   return(words)
@@ -38,39 +35,42 @@ a <- split_punct(a, "?")
 
 #             <-------------Q6------------->
 #a)
-a_lower<-tolower(a)
-a_unique<-unique(a_lower)
+a_lower<-tolower(a) # converts a to lowercase
+a_unique<-unique(a_lower) # gets the unique words from a_lower
 
 #b)
+# vector of indicies indicating which element in the unique word vector each
+# element in the (lower case) bible text corresponds to
 index <- match(a_lower, a_unique)
 
 #c)
+# count of how many times each unique word occurs in the text
 freq<-tabulate(index)
 
 #d) 
 m = 500
 threshold <- 5
-#while loop to check the threshold limit such that m ~ 500
+# while loop to check the threshold limit such that m ~ 500
 while (length(freq[freq>threshold]) >= m) {
   over_thresh <- threshold
-  #incrementing theshold value
+  # increment threshold value
   threshold <- threshold + 5
 }
 under_thresh <- threshold
 
-#equates threshold to a value(either threshold that makes m >= 500 or m < 500) 
-#such that m is closest to 500.
+# equates threshold to a value(either threshold that makes m >= 500 or m < 500) 
+# such that m is closest to 500.
 threshold <- if ((length(freq[freq>over_thresh]) - m) <= (m - length(freq[freq>under_thresh]))) over_thresh else under_thresh
 
 #e)
 j <- 1
-#empty vector
+# empty vector
 b <- c()
-#for loop to iterate over freq vector
+# for loop to iterate over freq vector
 for (count in freq) {
-  #checks if current element of freq vector is >= threshold found
+  # checks if current element of freq vector is >= threshold found
   if (count >= threshold) {
-    #if it is, append the word to vector b
+    # if it is, append the word to vector b
     b = append(b, a_unique[j])
   }
   j <- j + 1
@@ -90,8 +90,8 @@ matrix_col3 <- text_index[3:(length(text_index))]
 matrix <- cbind(matrix_col1, matrix_col2, matrix_col3)
 
 #c)
-#the new matrix now only contains rows without NA. The way this was done was
-#by counting how many NA's were in each row, keeping only the ones with none
+# the new matrix now only contains rows without NA. The way this was done was
+# by counting how many NA's were in each row, keeping only the ones with none
 matrix_new <- matrix[rowSums(is.na(matrix))==0, ]
 
 #d)
@@ -105,10 +105,6 @@ for (i in 1:nrow(matrix_new)){
     T[matrix_new[i,1],matrix_new[i,2],matrix_new[i,3]] + 1
 }
 
-#e)
-# not sure if we have to do anything here
-
-
 #f)
 # matrix A to fill in with probabilities
 A <- array(c(0,0), dim=c(b_n, b_n))
@@ -116,7 +112,7 @@ for (i in 1:nrow(matrix_new)){
   A[matrix_new[i,1],matrix_new[i,3]] = 
     A[matrix_new[i,1],matrix_new[i,3]] + 1 
 }
- # vector S to fill in with probabilities
+# vector S to fill in with probabilities
 S <- rep(0, b_n)
 for (i in 1:nrow(matrix_new)){
   S[matrix_new[i,1]] = S[matrix_new[i,1]] + 1
@@ -206,9 +202,6 @@ for (i in 1:length(div))
 
 
 b_low<-tolower(b_cap)#3712
-
-
-#b also has 498
 
 UpperCase <- function(x) {
   substr(x, 1, 1) <- toupper(substr(x, 1, 1))
