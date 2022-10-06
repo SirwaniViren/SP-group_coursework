@@ -2,6 +2,20 @@
 # Viren Sirwani Mulani s1949143
 # Alannah Hounat s2434943
 
+# Team member contributions to project:
+# Each member was in charge of individual questions. Some questions involved the 
+# collaboration of multiple members of the group.
+
+# The questions that were done individually are shown below:
+# Karman Singh s1936373 - Q4, Q5, Q6
+# Viren Sirwani Mulani s1949143 - Q1, Q8, Q9
+# Alannah Hounat s2434943 - Q3, Q2, Q10
+
+# Questions that members worked on together are the folowing:
+# Karman Singh s1936373, Viren Sirwani Mulani s1949143, Alannah Hounat s2434943 - Q7
+# Within Q7, part a) was done by Alannah Hounat s2434943, part b) by Karman Singh s1936373
+# and parts c), d), f) by Viren Sirwani Mulani s1949143.
+
 #             <-------------Q3------------->
 a <- scan("pg10.txt",what="character",skip=104) ## skip contents
 n <- length(a)
