@@ -4,7 +4,22 @@
 # Git repo Link: 
 # Team member contributions to project:
 
-
+success_check <- function(n, k, guess, numbered_boxes){
+  number_of_attempts <- 0
+  number_of_success <- 0
+  while (number_of_attempts <= n) {
+    if (guess == k) {
+      number_of_success <- 1
+      break
+    }
+    else {
+      guess <- numbered_boxes[guess]
+      number_of_attempts <- number_of_attempts + 1
+    }
+  }
+  
+  return (number_of_success)
+}
 
 Pone <- function(n, k, strategy, nreps) {
   number_of_success <- 0
@@ -17,30 +32,14 @@ Pone <- function(n, k, strategy, nreps) {
     
     if (strategy == 1) {
       guess <- numbered_boxes[k]
-      while (number_of_attempts <= n) {
-        if (guess == k) {
-          number_of_success <- number_of_success + 1
-          break
-        }
-        else {
-          guess <- numbered_boxes[guess]
-          number_of_attempts <- number_of_attempts + 1
-        }
-      }
+      check <- success_check(n, k, guess, numbered_boxes)
+      number_of_success <- number_of_success + check
     }
     
     else if (strategy == 2) {
-      guess <- sample(1:(2*n), 1)
-      while (number_of_attempts <= n){
-        if (guess == k){
-          number_of_success <- number_of_success + 1
-          break
-        }
-        else{
-          guess <- numbered_boxes[guess]
-          number_of_attempts <- number_of_attempts + 1
-        }
-      }
+      guess<-sample(1:(2*n),1)
+      check <- success_check(n, k, guess, numbered_boxes)
+      number_of_success <- number_of_success + check
     }
     else {
       #first we want to pick a box at random
@@ -60,7 +59,6 @@ Pone <- function(n, k, strategy, nreps) {
       }
     }
   }
-  
   prob_one <- number_of_success/nreps
   return (prob_one)
 }
