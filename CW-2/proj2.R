@@ -12,12 +12,11 @@ Pone <- function(n, k, strategy, nreps) {
     numbered_boxes <- sample(1:(2*n), 2*n)
     
     number_of_attempts <- 0
-    prisoner_number <- match(k, numbered_boxes)
     
     if (strategy == 1) {
-      try <- k
+      try <- numbered_boxes[k]
       while (number_of_attempts <= n) {
-        if (try == prisoner_number) {
+        if (try == k) {
           number_of_success <- number_of_success + 1
           break
         }
