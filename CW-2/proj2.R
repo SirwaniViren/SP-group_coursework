@@ -4,6 +4,8 @@
 # Git repo Link: 
 # Team member contributions to project:
 
+
+
 Pone <- function(n, k, strategy, nreps) {
   number_of_success <- 0
   for (reps in 1:nreps) {
@@ -14,52 +16,49 @@ Pone <- function(n, k, strategy, nreps) {
     number_of_attempts <- 0
     
     if (strategy == 1) {
-      try <- numbered_boxes[k]
+      guess <- numbered_boxes[k]
       while (number_of_attempts <= n) {
-        if (try == k) {
+        if (guess == k) {
           number_of_success <- number_of_success + 1
           break
         }
         else {
-          try <- numbered_boxes[try]
+          guess <- numbered_boxes[guess]
           number_of_attempts <- number_of_attempts + 1
         }
       }
     }
     
     else if (strategy == 2) {
-      guess<-sample(1:n,1)
-      while(number_of_attempts<=n){
-        if(guess==k){
+      guess <- sample(1:(2*n), 1)
+      while (number_of_attempts <= n){
+        if (guess == k){
           number_of_success <- number_of_success + 1
           break
         }
         else{
-          guess<-numbered_boxes[guess]
+          guess <- numbered_boxes[guess]
           number_of_attempts <- number_of_attempts + 1
         }
       }
-      
     }
     else {
       #first we want to pick a box at random
-      random_box<-sample(1:n,n)
-      while(number_of_attemps<=n){
+      random_box <- sample(1:(2*n), n)
+      index <- 1
+      while (number_of_attemps <= n){
         #if this random box contains the prisoners number
-        if(random_box=k){
+        if (random_box[index] == k){
           #count successes
-          number_of_success<- number_of_success + 1
+          number_of_success <- number_of_success + 1
         }
         else{
-          #pick a new random box
-          random_box<-sample(1:n,n)
-          #count fails
+          index <- index + 1
+          #count fail attempts
           number_of_attempts<-number_of_attempts +1
         }
       }
-      
     }
-    
   }
   
   prob_one <- number_of_success/nreps
