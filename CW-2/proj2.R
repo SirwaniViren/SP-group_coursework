@@ -28,33 +28,32 @@ Pone <- function(n, k, strategy, nreps) {
     # at that index corresponds to the numbered card randomly placed in the box
     numbered_boxes <- sample(1:(2*n), 2*n)
     
-    number_of_attempts <- 0
-    
     if (strategy == 1) {
       guess <- numbered_boxes[k]
       check <- success_check(n, k, guess, numbered_boxes)
       number_of_success <- number_of_success + check
     }
-    
     else if (strategy == 2) {
       guess<-sample(1:(2*n),1)
       check <- success_check(n, k, guess, numbered_boxes)
       number_of_success <- number_of_success + check
     }
-    else {
+    else if (strategy == 3) {
       #first we want to pick a box at random
       random_box <- sample(1:(2*n), n)
       index <- 1
-      while (number_of_attemps <= n){
+      number_of_attempts <- 0
+      for (box in random_box){
         #if this random box contains the prisoners number
-        if (random_box[index] == k){
+        if (box == k){
           #count successes
           number_of_success <- number_of_success + 1
+          break
         }
         else{
           index <- index + 1
           #count fail attempts
-          number_of_attempts<-number_of_attempts +1
+          number_of_attempts <- number_of_attempts + 1
         }
       }
     }
