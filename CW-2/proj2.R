@@ -28,14 +28,17 @@ produce_random_numbered_boxes <- function(n, quantity) {
 
 
 strategy1 <- function(n, k, strategy, nreps,number_of_success,numbered_boxes){
+  #Let initial guess be k-prisoners' number
   guess <- numbered_boxes[k]
+  #check the success 
   check <- success_check(n, k,numbered_boxes)
+  #if so, count the successes
   number_of_success <- number_of_success + check
   return(number_of_success)
 }
 
 strategy2 <- function(n, k, strategy, nreps,number_of_success,numbered_boxes){
-
+  #let initial guess be random
   guess<-produce_random_numbered_boxes(2 * n, 1)
   check <- success_check(n, k, numbered_boxes)
   number_of_success <- number_of_success + check
@@ -43,6 +46,7 @@ strategy2 <- function(n, k, strategy, nreps,number_of_success,numbered_boxes){
 }
 
 strategy3 <- function(n, k, strategy, nreps,number_of_success,random_box){
+  random_box <- produce_random_numbered_boxes(2 * n, n)
   for (box in random_box){
     #if one of the random boxes contains the prisoners number
     if (box == k){
@@ -68,10 +72,9 @@ Pone <- function(n, k, strategy, nreps = 10000) {
       number_of_success=strategy2(n, k, strategy, nreps,number_of_success,numbered_boxes)
     }
     else if (strategy == 3) {
-      number_of_success=strategy3(n, k, strategy, nreps,number_of_success,numbered_boxes)
+      number_of_success=strategy3(n, k, strategy, nreps,number_of_success,random_box)
     }
   }
-  print(number_of_success)
   prob_one_estimate <- number_of_success / nreps
   return (prob_one_estimate)
 }
@@ -165,11 +168,3 @@ Pall <- function(n, strategy, nreps = 10000) {
 dloop <- function(n, nreps) {
   
 }
-
-
-# Pone(50,1,1,10000)
-# Pone(50,1,2,10000)
-Pone(50,1,3,10000)
-# Pone(5,1,1,10000)
-# Pone(5,1,2,10000)
-Pone(5,1,3,10000)
