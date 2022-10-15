@@ -22,29 +22,59 @@ success_check <- function(n, k, numbered_boxes) {
   return (number_of_success)
 }
 
-produce_random_numberes_boxes <- function(n, quantity) {
+produce_random_numbered_boxes <- function(n, quantity) {
   return (sample(1:n, quantity))
 }
+
+
+# strategy1 <- function(n, k, strategy, nreps){
+#   guess <- numbered_boxes[k]
+#   check <- success_check(n, k, guess, numbered_boxes)
+#   number_of_success <- number_of_success + check
+# 
+#     
+# }
+# 
+# strategy2 <- function(n, k, strategy, nreps){
+#   guess<-produce_random_numbered_boxes(2 * n, 1)
+#   check <- success_check(n, k, guess, numbered_boxes)
+#   number_of_success <- number_of_success + check
+#   
+#   
+# }
+# 
+# strategy3 <- function(n, k, strategy, nreps){
+#   #first we want to pick n boxes at random
+#   random_box <- produce_random_numbered_boxes(2 * n, n)
+#   for (box in random_box){
+#     #if one of the random boxes contains the prisoners number
+#     if (box == k){
+#       #count successes
+#       number_of_success <- number_of_success + 1
+#       break
+#     }
+#   }
+# }
 
 Pone <- function(n, k, strategy, nreps = 10000) {
   number_of_success <- 0
   for (reps in 1:nreps) {
     # index of numbered_boxes corresponds to the box number, and the value stored
     # at that index corresponds to the numbered card randomly placed in the box
-    numbered_boxes <- produce_random_numberes_boxes(2 * n, 2 * n)
+    numbered_boxes <- produce_random_numbered_boxes(2 * n, 2 * n)
     
     if (strategy == 1) {
       check <- success_check(n, k, numbered_boxes)
       number_of_success <- number_of_success + check
     }
     else if (strategy == 2) {
-      random_start_box <- produce_random_numberes_boxes(2 * n, 1)
+      random_start_box <- produce_random_numbered_boxes(2 * n, 1)
       check <- success_check(n, random_start_box, numbered_boxes)
       number_of_success <- number_of_success + check
     }
     else if (strategy == 3) {
       #picking n boxes at random
-      random_box <- produce_random_numberes_boxes(2 * n, n)
+      random_box <- produce_random_numbered_boxes(2 * n, n)
       for (box in random_box) {
         #if this random box contains the prisoners number
         if (box == k) {
@@ -64,7 +94,7 @@ Pall <- function(n, strategy, nreps = 10000) {
   for (reps in 1:nreps) {
     # Outside inner loop since the room is returned to original state once 
     # prisoner leaves
-    numbered_boxes <- produce_random_numberes_boxes(2 * n, 2 * n)
+    numbered_boxes <- produce_random_numbered_boxes(2 * n, 2 * n)
     for (prisoner_number in 1:(2 * n)) {
       if (strategy == 1) {
         check <- success_check(n, prisoner_number, numbered_boxes)
@@ -72,14 +102,14 @@ Pall <- function(n, strategy, nreps = 10000) {
           break
       }
       else if (strategy == 2) {
-        random_start_box <- produce_random_numberes_boxes(2 * n, 1)
+        random_start_box <- produce_random_numbered_boxes(2 * n, 1)
         check <- success_check(n, random_start_box, numbered_boxes)
         if (check == 0)
           break
       }
       else if (strategy == 3) {
         #picking n boxes at random
-        random_box <- produce_random_numberes_boxes(2 * n, n)
+        random_box <- produce_random_numbered_boxes(2 * n, n)
         check <- 0
         for (box in random_box) {
           #if this random box contains the prisoners number
@@ -95,6 +125,7 @@ Pall <- function(n, strategy, nreps = 10000) {
     }
     number_of_success <- number_of_success + check
   }
+  
   prob_all_estimate <- number_of_success / nreps
   return (prob_all_estimate)
 }
@@ -116,6 +147,33 @@ Pall <- function(n, strategy, nreps = 10000) {
 # cat("\nn=50\nStrategy 1:", Pall(50, 1))
 # cat("\nStrategy 2:", Pall(50, 2))
 # cat("\nStrategy 3:", Pall(50, 3))
+
+#example code for Pone
+# Pone(50,1,1,10000)
+# Pone(50,1,2,10000)
+# Pone(50,1,3,10000)
+# Pone(5,1,1,10000)
+# Pone(5,1,2,10000)
+# Pone(5,1,3,10000)
+#example code for Pall
+# Pall(50,1,10000)
+# Pall(50,2,10000)
+# Pall(50,3,10000)
+# Pall(5,1,10000)
+# Pall(5,2,10000)
+# Pall(5,3,10000)
+
+#For Pone evidently the less people there are (the smaller that n is) the better 
+#chance of success. Although Strategy 3 yields almost consistently similar results
+#as after all we are still only observing n boxes with 2*n people
+
+#Pall is where we observe a surprising result strategy2 and strategy3 yield zero/near zero
+#probabilities. Strategy1 yields an approximate 30% and 50% chances (n=50 case and n=5 case
+#respectively) This seems to be the most optimal strategy, but why?
+#This is due to a cycle.
+#Every box leads to another box and eventually loops back to the number we began with,
+#this is guaranteed. What is not guaranteed is the cycle which contains your number
+#may not be in a cycle with n or less elements.
 
 dloop <- function(n, nreps) {
   
