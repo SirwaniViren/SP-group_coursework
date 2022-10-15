@@ -27,34 +27,32 @@ produce_random_numbered_boxes <- function(n, quantity) {
 }
 
 
-# strategy1 <- function(n, k, strategy, nreps){
-#   guess <- numbered_boxes[k]
-#   check <- success_check(n, k, guess, numbered_boxes)
-#   number_of_success <- number_of_success + check
-# 
-#     
-# }
-# 
-# strategy2 <- function(n, k, strategy, nreps){
-#   guess<-produce_random_numbered_boxes(2 * n, 1)
-#   check <- success_check(n, k, guess, numbered_boxes)
-#   number_of_success <- number_of_success + check
-#   
-#   
-# }
-# 
-# strategy3 <- function(n, k, strategy, nreps){
-#   #first we want to pick n boxes at random
-#   random_box <- produce_random_numbered_boxes(2 * n, n)
-#   for (box in random_box){
-#     #if one of the random boxes contains the prisoners number
-#     if (box == k){
-#       #count successes
-#       number_of_success <- number_of_success + 1
-#       break
-#     }
-#   }
-# }
+strategy1 <- function(n, k, strategy, nreps,number_of_success,numbered_boxes){
+  guess <- numbered_boxes[k]
+  check <- success_check(n, k,numbered_boxes)
+  number_of_success <- number_of_success + check
+  return(number_of_success)
+}
+
+strategy2 <- function(n, k, strategy, nreps,number_of_success,numbered_boxes){
+
+  guess<-produce_random_numbered_boxes(2 * n, 1)
+  check <- success_check(n, k, numbered_boxes)
+  number_of_success <- number_of_success + check
+  return(number_of_success)
+}
+
+strategy3 <- function(n, k, strategy, nreps,number_of_success,random_box){
+  for (box in random_box){
+    #if one of the random boxes contains the prisoners number
+    if (box == k){
+      #count successes
+      number_of_success <- number_of_success + 1
+      break
+    }
+  }
+  return(number_of_success)
+}
 
 Pone <- function(n, k, strategy, nreps = 10000) {
   number_of_success <- 0
@@ -64,27 +62,16 @@ Pone <- function(n, k, strategy, nreps = 10000) {
     numbered_boxes <- produce_random_numbered_boxes(2 * n, 2 * n)
     
     if (strategy == 1) {
-      check <- success_check(n, k, numbered_boxes)
-      number_of_success <- number_of_success + check
+      number_of_success=strategy1(n, k, strategy, nreps,number_of_success,numbered_boxes)
     }
     else if (strategy == 2) {
-      random_start_box <- produce_random_numbered_boxes(2 * n, 1)
-      check <- success_check(n, random_start_box, numbered_boxes)
-      number_of_success <- number_of_success + check
+      number_of_success=strategy2(n, k, strategy, nreps,number_of_success,numbered_boxes)
     }
     else if (strategy == 3) {
-      #picking n boxes at random
-      random_box <- produce_random_numbered_boxes(2 * n, n)
-      for (box in random_box) {
-        #if this random box contains the prisoners number
-        if (box == k) {
-          #count successes
-          number_of_success <- number_of_success + 1
-          break
-        }
-      }
+      number_of_success=strategy3(n, k, strategy, nreps,number_of_success,numbered_boxes)
     }
   }
+  print(number_of_success)
   prob_one_estimate <- number_of_success / nreps
   return (prob_one_estimate)
 }
@@ -167,9 +154,9 @@ Pall <- function(n, strategy, nreps = 10000) {
 #chance of success. Although Strategy 3 yields almost consistently similar results
 #as after all we are still only observing n boxes with 2*n people
 
-#Pall is where we observe a surprising result strategy2 and strategy3 yield zero/near zero
-#probabilities. Strategy1 yields an approximate 30% and 50% chances (n=50 case and n=5 case
-#respectively) This seems to be the most optimal strategy, but why?
+#Pall is where we observe surprising results, strategy3 yield zero/near zero
+#probabilities, Strategy1 and strategy2 yields an approximate 30% and 50% chances (n=50 case and n=5 case
+#respectively) They seems to be the most optimal strategies, but why?
 #This is due to a cycle.
 #Every box leads to another box and eventually loops back to the number we began with,
 #this is guaranteed. What is not guaranteed is the cycle which contains your number
@@ -178,3 +165,11 @@ Pall <- function(n, strategy, nreps = 10000) {
 dloop <- function(n, nreps) {
   
 }
+
+
+# Pone(50,1,1,10000)
+# Pone(50,1,2,10000)
+Pone(50,1,3,10000)
+# Pone(5,1,1,10000)
+# Pone(5,1,2,10000)
+Pone(5,1,3,10000)
