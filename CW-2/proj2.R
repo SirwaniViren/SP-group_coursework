@@ -40,30 +40,27 @@ produce_random_numbered_boxes <- function(n, quantity) {
 # picks a box with their number on it, the second strategy where a prisoner
 # picks a random box to begin with, and the third strategy where a prisoner
 # picks n boxes at random, checking each card for their number
-strategy <- function(n, k, strategy, nreps,number_of_success,numbered_boxes){
-  #Let initial guess be k-prisoners' number
-  guess <- numbered_boxes[k]
-  if (strategy == 1) 
-    guess <- numbered_boxes[k] 
+strategy <- function(n, k, strategy, numbered_boxes){
+  success_strategy3 <- 0
+  if (strategy == 1)
+    first_box <- k
   else if (strategy == 2)
-    guess <- produce_random_numbered_boxes(2 * n, 1)
+    first_box <- produce_random_numbered_boxes(2 * n, 1)
   else if (strategy == 3) {
     random_box <- produce_random_numbered_boxes(2 * n, n)
-    for (box in random_box){
+    for (box in random_box) {
       #if one of the random boxes contains the prisoners number
       if (box == k){
         #count successes
-        number_of_success <- number_of_success + 1
+        success_strategy3 <- 1
         break
       }
     }
-    return(number_of_success)
+    return (success_strategy3)
   }
   #check the success 
-  check <- success_check(n, k,numbered_boxes)
-  #if so, count the successes
-  number_of_success <- number_of_success + check
-  return(number_of_success)
+  check <- success_check(n, first_box, numbered_boxes)
+  return(check)
 }
 
 # INPUT: n <- decides numbers of prisoners, k <- prisoner number, 
@@ -76,7 +73,8 @@ Pone <- function(n, k, strategy, nreps = 10000) {
     # index of numbered_boxes corresponds to the box number, and the value stored
     # at that index corresponds to the numbered card randomly placed in the box
     numbered_boxes <- produce_random_numbered_boxes(2 * n, 2 * n)
-    number_of_success=strategy(n, k, strategy, nreps,number_of_success, numbered_boxes)
+    number_of_success <- number_of_success + 
+      strategy(n, k, strategy, numbered_boxes)
   }
   prob_one_estimate <- number_of_success / nreps
   return (prob_one_estimate)
