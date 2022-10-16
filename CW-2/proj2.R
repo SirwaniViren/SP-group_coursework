@@ -4,8 +4,7 @@
 # Git repo Link:
 # Team member contributions to project:
 
-# INPUT: n <- decides numbers of prisoners, k<- prisoner number, 
-# numbered_boxes <- numbered boxes
+# INPUT: n <- decides numbers of prisoners, k<- prisoner number, numbered_boxes <- numbered boxes
 # OUTPUT: the number of successes
 # Purpose: Is to find and track the number of successes for us to calculate
 # the probabilities in later functions. Also, so code isn't repeated in later functions
@@ -44,11 +43,9 @@ produce_random_numbered_boxes <- function(n, quantity) {
   return (sample(1:n, quantity))
 }
 
-# INPUT: n <- decides numbers of prisoners, k <- prisoner number, 
-# strategy <- 1, 2 or 3, nreps <- number of times experiment is done,
-# number_of_success<- the number of successes so far, 
+# INPUT: n <- decides numbers of prisoners, k <- prisoner number, strategy <- 1, 2 or 3,
 # numbered_boxes<- numbered boxes
-# OUTPUT: number of successes
+# OUTPUT: 1(success) or 0(fail)
 # PURPOSE: This function simulates the first strategy where a prisoner
 # picks a box with their number on it, the second strategy where a prisoner
 # picks a random box to begin with, and the third strategy where a prisoner
@@ -67,22 +64,22 @@ check_success_given_strategy <- function(n, k, strategy, numbered_boxes){
     # here we need n random boxes, the aforementioned helper function is used again
     random_box <- produce_random_numbered_boxes(2 * n, n)
     for (box in random_box) {
-      #if one of the random boxes contains the prisoners number
+      # if one of the random boxes contains the prisoners number
       if (box == k){
-        #count successes
+        # count successes
         success_strategy3 <- 1
         break
       }
     }
     return (success_strategy3)
   }
-  #check the success, used for strategy 1 and 2
+  # check the success, used for strategy 1 and 2
   check <- success_check(n, first_box, numbered_boxes)
   return(check)
 }
 
-# INPUT: n <- decides numbers of prisoners, k <- prisoner number, 
-# strategy <- either 1,2,3, nreps <- number of times experiment is done
+# INPUT: n <- decides numbers of prisoners, k <- prisoner number, strategy <- either 1,2,3,
+# nreps <- number of times experiment is done
 # OUTPUT: Probability estimate of prisoner k finding their number using given strategy
 # PURPOSE: To find the probability of one prisoner finding their number
 Pone <- function(n, k, strategy, nreps = 10000) {
@@ -152,10 +149,9 @@ cat("\nStrategy 3:", Pall(50, 3))
 # this is guaranteed. What is not guaranteed is the cycle which contains the 
 # prisoner number may have a length greater than n.
 
-
-# probability of each loop length from 1 to 2n occurring at least once in a 
-# random shuffling of cards to boxes = 1 - prob of each loop length occurring 
-# 0 times
+# INPUT: n <- decides numbers of prisoners, nreps <- number of times experiment is done
+# OUTPUT: 
+# PURPOSE: 
 dloop <- function(n, nreps = 10000) {
   # count of all the cycles with loop length 1 to 2n that occurred 0 times 
   # in the simulation
@@ -176,16 +172,16 @@ dloop <- function(n, nreps = 10000) {
       # length of the cycle that contains the prisoner number
       individual_cycles = c()
       # if prisoner number is not present in any previous cycles, we follow
-      # the path of boxes to find the cycle that contains the prisoner number
+      # the path of boxes to find the cycle that contains the prisoner number.
       # if the prisoner number is present, then just skip to the next 
       # prisoner number
       if (!(prisoner_number %in% numbers_iterated_over)) {
         individual_cycles = append(individual_cycles, prisoner_number)
-        cycle = numbered_boxes[prisoner_number]
+        next_box_in_cycle = numbered_boxes[prisoner_number]
         # checks if the card removed from the box contains the prisoner number
-        while (cycle != prisoner_number) {
-          individual_cycles = append(individual_cycles, cycle)
-          cycle = numbered_boxes[cycle]
+        while (next_box_in_cycle != prisoner_number) {
+          individual_cycles = append(individual_cycles, next_box_in_cycle)
+          next_box_in_cycle = numbered_boxes[next_box_in_cycle]
         }
         count_of_loop_length[length(individual_cycles)] = 
           count_of_loop_length[length(individual_cycles)] + 1
@@ -200,8 +196,8 @@ dloop <- function(n, nreps = 10000) {
     count_loop_length_0_times[index_loop_length_0_times] = 
       count_loop_length_0_times[index_loop_length_0_times] + 1
   }
-  prob_loop_length_0_times = count_loop_length_0_times/nreps
-  prob_loop_length_at_least_once = 1 - prob_loop_length_0_times
+  prob_loop_length_0_times <- count_loop_length_0_times/nreps
+  prob_loop_length_at_least_once <- 1 - prob_loop_length_0_times
   return (prob_loop_length_at_least_once)
 }
 
