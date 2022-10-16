@@ -241,8 +241,6 @@ dloop <- function(n, nreps = 10000) {
 # example code for dloop
 # dloop(50,10000)
 
-# For n=50, no loop longer than 50 can occur. 
-
 
 # We use a line graph to visualize the probabilities for each loop length. A line
 # graph is used her since we can identify trends in the data. Usually line graphs are
