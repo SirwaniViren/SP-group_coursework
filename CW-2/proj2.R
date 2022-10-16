@@ -8,14 +8,14 @@
 # numbered_boxes <- numbered boxes
 # OUTPUT: the number of successes
 # Purpose: Is to find and track the number of successes for us to calculate
-# the probabilities in later functions. Also code isnt repeated in later functions
+# the probabilities in later functions. Also code isn't repeated in later functions
 success_check <- function(n, k, numbered_boxes) {
   number_of_attempts <- 0
-  number_of_success <- 0
+  success <- 0
   guess <- numbered_boxes[k]
   while (number_of_attempts <= n) {
     if (guess == k) {
-      number_of_success <- 1
+      success <- 1
       break
     }
     else {
@@ -24,7 +24,7 @@ success_check <- function(n, k, numbered_boxes) {
     }
   }
   
-  return (number_of_success)
+  return (success)
 }
 
 produce_random_numbered_boxes <- function(n, quantity) {
@@ -40,7 +40,7 @@ produce_random_numbered_boxes <- function(n, quantity) {
 # picks a box with their number on it, the second strategy where a prisoner
 # picks a random box to begin with, and the third strategy where a prisoner
 # picks n boxes at random, checking each card for their number
-strategy <- function(n, k, strategy, numbered_boxes){
+check_success_given_strategy <- function(n, k, strategy, numbered_boxes){
   success_strategy3 <- 0
   if (strategy == 1)
     first_box <- k
@@ -74,7 +74,7 @@ Pone <- function(n, k, strategy, nreps = 10000) {
     # at that index corresponds to the numbered card randomly placed in the box
     numbered_boxes <- produce_random_numbered_boxes(2 * n, 2 * n)
     number_of_success <- number_of_success + 
-      strategy(n, k, strategy, numbered_boxes)
+      check_success_given_strategy(n, k, strategy, numbered_boxes)
   }
   prob_one_estimate <- number_of_success / nreps
   return (prob_one_estimate)
@@ -91,32 +91,35 @@ Pall <- function(n, strategy, nreps = 10000) {
     # prisoner leaves
     numbered_boxes <- produce_random_numbered_boxes(2 * n, 2 * n)
     for (prisoner_number in 1:(2 * n)) {
-      if (strategy == 1) {
-        check <- success_check(n, prisoner_number, numbered_boxes)
-        if (check == 0)
-          break
-      }
-      else if (strategy == 2) {
-        random_start_box <- produce_random_numbered_boxes(2 * n, 1)
-        check <- success_check(n, random_start_box, numbered_boxes)
-        if (check == 0)
-          break
-      }
-      else if (strategy == 3) {
-        #picking n boxes at random
-        random_box <- produce_random_numbered_boxes(2 * n, n)
-        check <- 0
-        for (box in random_box) {
-          #if this random box contains the prisoners number
-          if (box == prisoner_number) {
-            check = 1
-            break
-          }
-        }
-        if (check == 0) {
-          break
-        }
-      }
+      check <- check_success_given_strategy(n, prisoner_number, strategy, numbered_boxes)
+      if (check == 0)
+        break
+      # if (strategy == 1) {
+      #   check <- success_check(n, prisoner_number, numbered_boxes)
+      #   if (check == 0)
+      #     break
+      # }
+      # else if (strategy == 2) {
+      #   random_start_box <- produce_random_numbered_boxes(2 * n, 1)
+      #   check <- success_check(n, random_start_box, numbered_boxes)
+      #   if (check == 0)
+      #     break
+      # }
+      # else if (strategy == 3) {
+      #   #picking n boxes at random
+      #   random_box <- produce_random_numbered_boxes(2 * n, n)
+      #   check <- 0
+      #   for (box in random_box) {
+      #     #if this random box contains the prisoners number
+      #     if (box == prisoner_number) {
+      #       check = 1
+      #       break
+      #     }
+      #   }
+      #   if (check == 0) {
+      #     break
+      #   }
+      # }
     }
     number_of_success <- number_of_success + check
   }
@@ -125,23 +128,23 @@ Pall <- function(n, strategy, nreps = 10000) {
   return (prob_all_estimate)
 }
 
-# cat("Probability estimate of a single prisoner succeeding in finding their number:")
-# cat("\nn=5\nStrategy 1:", Pone(5, 7, 1))
-# cat("\nStrategy 2:", Pone(5, 7, 2))
-# cat("\nStrategy 3:", Pone(5, 7, 3))
-# 
-# cat("\nn=50\nStrategy 1:", Pone(50, 7, 1))
-# cat("\nStrategy 2:", Pone(50, 7, 2))
-# cat("\nStrategy 3:", Pone(50, 7, 3))
-# 
-# cat("\nProbability estimate of all prisoners succeeding in finding their numbers:")
-# cat("\nn=5\nStrategy 1:", Pall(5, 1))
-# cat("\nStrategy 2:", Pall(5, 2))
-# cat("\nStrategy 3:", Pall(5, 3))
-# 
-# cat("\nn=50\nStrategy 1:", Pall(50, 1))
-# cat("\nStrategy 2:", Pall(50, 2))
-# cat("\nStrategy 3:", Pall(50, 3))
+cat("Probability estimate of a single prisoner succeeding in finding their number:")
+cat("\nn=5\nStrategy 1:", Pone(5, 7, 1))
+cat("\nStrategy 2:", Pone(5, 7, 2))
+cat("\nStrategy 3:", Pone(5, 7, 3))
+
+cat("\nn=50\nStrategy 1:", Pone(50, 7, 1))
+cat("\nStrategy 2:", Pone(50, 7, 2))
+cat("\nStrategy 3:", Pone(50, 7, 3))
+
+cat("\nProbability estimate of all prisoners succeeding in finding their numbers:")
+cat("\nn=5\nStrategy 1:", Pall(5, 1))
+cat("\nStrategy 2:", Pall(5, 2))
+cat("\nStrategy 3:", Pall(5, 3))
+
+cat("\nn=50\nStrategy 1:", Pall(50, 1))
+cat("\nStrategy 2:", Pall(50, 2))
+cat("\nStrategy 3:", Pall(50, 3))
 
 #example code for Pone
 # Pone(50,1,1,10000)
@@ -224,8 +227,8 @@ dloop <- function(n, nreps = 10000) {
 }
 
 
-# cat("Probability of loop length from 1 to 2n occurring at least once in a random shuffling of cards to boxes: ")
-# cat("\nFor n=50: ", dloop(50))
+cat("Probability of loop length from 1 to 2n occurring at least once in a random shuffling of cards to boxes: ")
+cat("\nFor n=50: ", dloop(50))
 
 # example code for dloop
 # dloop(50,10000)
@@ -254,4 +257,3 @@ bar_chart <- barplot(height=loop_vector2,
                      main= "probability of each loop length from 1 to 2n occurring at least once",
                      space=0)
 axis(side=1,at=c(0,(2*n2)))
-
