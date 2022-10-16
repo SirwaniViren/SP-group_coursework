@@ -4,11 +4,11 @@
 # Git repo Link:
 # Team member contributions to project:
 
-#INPUT: n <- decides numbers of prisoners, k<- prisoner number
-#numbered_boxes <- numbered boxes
-#output:the number of successes
-#Purpose: Is to find and track the number of successes for us to calculate
-#the probabilities in later functions. Also code isnt repeated in later functions
+# INPUT: n <- decides numbers of prisoners, k<- prisoner number, 
+# numbered_boxes <- numbered boxes
+# OUTPUT: the number of successes
+# Purpose: Is to find and track the number of successes for us to calculate
+# the probabilities in later functions. Also code isnt repeated in later functions
 success_check <- function(n, k, numbered_boxes) {
   number_of_attempts <- 0
   number_of_success <- 0
@@ -31,15 +31,34 @@ produce_random_numbered_boxes <- function(n, quantity) {
   return (sample(1:n, quantity))
 }
 
-#INPUT: n <- decides numbers of prisoners, k <- prisoner number, strategy <-1
-#nreps <- number of times experiment is done,number_of_success<- the number of successes so far,
-#numbered_boxes<- numbered boxes
-#OUTPUT: number of successes
-#PURPOSE: This function simulates the first strategy where a prisoner
-#picks a box with their number on it
-strategy1 <- function(n, k, strategy, nreps,number_of_success,numbered_boxes){
+# INPUT: n <- decides numbers of prisoners, k <- prisoner number, 
+# strategy <- 1, 2 or 3, nreps <- number of times experiment is done,
+# number_of_success<- the number of successes so far, 
+# numbered_boxes<- numbered boxes
+# OUTPUT: number of successes
+# PURPOSE: This function simulates the first strategy where a prisoner
+# picks a box with their number on it, the second strategy where a prisoner
+# picks a random box to begin with, and the third strategy where a prisoner
+# picks n boxes at random, checking each card for their number
+strategy <- function(n, k, strategy, nreps,number_of_success,numbered_boxes){
   #Let initial guess be k-prisoners' number
   guess <- numbered_boxes[k]
+  if (strategy == 1) 
+    guess <- numbered_boxes[k] 
+  else if (strategy == 2)
+    guess <- produce_random_numbered_boxes(2 * n, 1)
+  else if (strategy == 3) {
+    random_box <- produce_random_numbered_boxes(2 * n, n)
+    for (box in random_box){
+      #if one of the random boxes contains the prisoners number
+      if (box == k){
+        #count successes
+        number_of_success <- number_of_success + 1
+        break
+      }
+    }
+    return(number_of_success)
+  }
   #check the success 
   check <- success_check(n, k,numbered_boxes)
   #if so, count the successes
@@ -47,42 +66,10 @@ strategy1 <- function(n, k, strategy, nreps,number_of_success,numbered_boxes){
   return(number_of_success)
 }
 
-#INPUT: n <- decides numbers of prisoners, k <- prisoner number, strategy <- 2
-#nreps <- number of times experiment is done,number_of_success<- the number of successes so far,
-#numbered_boxes<- numbered boxes
-#OUTPUT: number of successes
-#PURPOSE: This function simulates the second strategy where a prisoner
-#picks a random box to begin with
-strategy2 <- function(n, k, strategy, nreps,number_of_success,numbered_boxes){
-  #let initial guess be random
-  guess<-produce_random_numbered_boxes(2 * n, 1)
-  check <- success_check(n, k, numbered_boxes)
-  number_of_success <- number_of_success + check
-  return(number_of_success)
-}
-
-#INPUT: n <- decides numbers of prisoners, k <- prisoner number, strategy <- 3
-#nreps <- number of times experiment is done,number_of_success<- the number of successes so far,
-#OUTPUT: number of successes
-#PURPOSE: This function simulates the third strategy where a prisoner
-#picks n boxes at random, checking each card for their number
-strategy3 <- function(n, k, strategy, nreps,number_of_success){
-  random_box <- produce_random_numbered_boxes(2 * n, n)
-  for (box in random_box){
-    #if one of the random boxes contains the prisoners number
-    if (box == k){
-      #count successes
-      number_of_success <- number_of_success + 1
-      break
-    }
-  }
-  return(number_of_success)
-}
-
-#INPUT: n <- decides numbers of prisoners, k <- prisoner number, strategy <- either 1,2,3
-#nreps <- number of times experiment is done
-#OUTPUT: Probability of strategy given chosen parameters in the input
-#PURPOSE: To find the probability of one prisoner being released for chosen inputs
+# INPUT: n <- decides numbers of prisoners, k <- prisoner number, 
+# strategy <- either 1,2,3, nreps <- number of times experiment is done
+# OUTPUT: Probability estimate of prisoner k finding their number using given strategy
+# PURPOSE: To find the probability of one prisoner finding their number
 Pone <- function(n, k, strategy, nreps = 10000) {
   number_of_success <- 0
   for (reps in 1:nreps) {
@@ -104,10 +91,10 @@ Pone <- function(n, k, strategy, nreps = 10000) {
   return (prob_one_estimate)
 }
 
-#INPUT: n <- decides numbers of prisoners strategy <- either 1,2,3
-#nreps <- number of times experiment is done
-#OUTPUT: Probability of strategy given chosen parameters in the input
-#PURPOSE: To find the probability of all prisoners being released for chosen inputs
+# INPUT: n <- decides numbers of prisoners, strategy <- either 1,2,3
+# nreps <- number of times experiment is done
+# OUTPUT: Probability estimate of all prisoners finding their number using given strategy
+# PURPOSE: To find the probability of all prisoners being released
 Pall <- function(n, strategy, nreps = 10000) {
   number_of_success <- 0
   for (reps in 1:nreps) {
