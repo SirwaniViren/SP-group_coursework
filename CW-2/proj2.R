@@ -76,16 +76,7 @@ Pone <- function(n, k, strategy, nreps = 10000) {
     # index of numbered_boxes corresponds to the box number, and the value stored
     # at that index corresponds to the numbered card randomly placed in the box
     numbered_boxes <- produce_random_numbered_boxes(2 * n, 2 * n)
-    
-    if (strategy == 1) {
-      number_of_success=strategy(n, k, strategy, nreps,number_of_success, numbered_boxes)
-    }
-    else if (strategy == 2) {
-      number_of_success=strategy(n, k, strategy, nreps,number_of_success, numbered_boxes)
-    }
-    else if (strategy == 3) {
-      number_of_success=strategy(n, k, strategy, nreps,number_of_success, numbered_boxes)
-    }
+    number_of_success=strategy(n, k, strategy, nreps,number_of_success, numbered_boxes)
   }
   prob_one_estimate <- number_of_success / nreps
   return (prob_one_estimate)
