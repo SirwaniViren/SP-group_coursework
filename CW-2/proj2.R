@@ -8,7 +8,7 @@
 # numbered_boxes <- numbered boxes
 # OUTPUT: the number of successes
 # Purpose: Is to find and track the number of successes for us to calculate
-# the probabilities in later functions. Also code isn't repeated in later functions
+# the probabilities in later functions. Also, so code isn't repeated in later functions
 success_check <- function(n, k, numbered_boxes) {
   number_of_attempts <- 0
   success <- 0
@@ -145,21 +145,6 @@ cat("\nStrategy 3:", Pall(5, 3))
 cat("\nn=50\nStrategy 1:", Pall(50, 1))
 cat("\nStrategy 2:", Pall(50, 2))
 cat("\nStrategy 3:", Pall(50, 3))
-
-#example code for Pone
-# Pone(50,1,1,10000)
-# Pone(50,1,2,10000)
-# Pone(50,1,3,10000)
-# Pone(5,1,1,10000)
-# Pone(5,1,2,10000)
-# Pone(5,1,3,10000)
-#example code for Pall
-# Pall(50,1,10000)
-# Pall(50,2,10000)
-# Pall(50,3,10000)
-# Pall(5,1,10000)
-# Pall(5,2,10000)
-# Pall(5,3,10000)
 
 # For Pone evidently the less people there are (the smaller that n is) the better 
 # chance of success. Although Strategy 3 yields almost consistently similar 
