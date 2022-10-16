@@ -163,18 +163,67 @@ Pall <- function(n, strategy, nreps = 10000) {
 # Pall(5,2,10000)
 # Pall(5,3,10000)
 
-#For Pone evidently the less people there are (the smaller that n is) the better 
-#chance of success. Although Strategy 3 yields almost consistently similar results
-#as after all we are still only observing n boxes with 2*n people
+# For Pone evidently the less people there are (the smaller that n is) the better 
+# chance of success. Although Strategy 3 yields almost consistently similar 
+# results as after all we are still only observing n boxes with 2*n prisoners.
 
-#Pall is where we observe a surprising result strategy2 and strategy3 yield zero/near zero
-#probabilities. Strategy1 yields an approximate 30% and 50% chances (n=50 case and n=5 case
-#respectively) This seems to be the most optimal strategy, but why?
-#This is due to a cycle.
-#Every box leads to another box and eventually loops back to the number we began with,
-#this is guaranteed. What is not guaranteed is the cycle which contains your number
-#may not be in a cycle with n or less elements.
+# Pall is where we observe a surprising result. Strategy 3 yields zero/near zero
+# probabilities. Strategy 1 yields an approximate probability of 33% and 52% when
+# n=50 and n=5 respectively. This seems to be the most optimal strategy, but why?
+# This is due to a cycle.
+# Every box leads to another box and eventually loops back to the prisoner number,
+# this is guaranteed. What is not guaranteed is the cycle which contains the 
+# prisoner number may have a length greater than n.
 
-dloop <- function(n, nreps) {
-  
+
+# probability of each loop length from 1 to 2n occurring at least once in a 
+# random shuffling of cards to boxes = 1 - prob of each loop length occurring 
+# 0 times
+dloop <- function(n, nreps = 10000) {
+  # count of all the cycles with loop length 1 to 2n that occurred 0 times 
+  # in the simulation
+  count_loop_length_0_times = rep(0, 2*n)
+  #loop over all experiments(number of repetitions)
+  for (reps in 1:nreps) {
+    # index of numbered_boxes corresponds to the box number, and the value stored
+    # at that index corresponds to the numbered card randomly placed in the box
+    numbered_boxes <- produce_random_numbered_boxes(2 * n, 2 * n)
+    # count of how many times a cycle has 1 to 2n loop length
+    count_of_loop_length = rep(0, 2*n)
+    # numbers that are already present in a cycle, hence don't need to be 
+    # iterated over again
+    numbers_iterated_over = c()
+    # looping over all prisoner numbers
+    for (prisoner_number in 1:(2 * n)) {
+      # vector to hold various cycles, length of this vector would give the 
+      # length of the cycle that contains the prisoner number
+      individual_cycles = c()
+      # if prisoner number is not present in any previous cycles, we follow
+      # the path of boxes to find the cycle that contains the prisoner number
+      # if the prisoner number is present, then just skip to the next 
+      # prisoner number
+      if (!(prisoner_number %in% numbers_iterated_over)) {
+        individual_cycles = append(individual_cycles, prisoner_number)
+        cycle = numbered_boxes[prisoner_number]
+        # checks if the card removed from the box contains the prisoner number
+        while (cycle != prisoner_number) {
+          individual_cycles = append(individual_cycles, cycle)
+          cycle = numbered_boxes[cycle]
+        }
+        count_of_loop_length[length(individual_cycles)] = 
+          count_of_loop_length[length(individual_cycles)] + 1
+        # appending the numbers in the cycle to the vector that contains all the
+        # cycles
+        numbers_iterated_over = append(numbers_iterated_over, individual_cycles)
+      }
+    }
+    # finds all loop lengths that occurred 0 times in the experiment and adds 1
+    # to the count for each of those loop lengths
+    index_loop_length_0_times = grep(0, count_of_loop_length)
+    count_loop_length_0_times[index_loop_length_0_times] = 
+      count_loop_length_0_times[index_loop_length_0_times] + 1
+  }
+  prob_loop_length_0_times = count_loop_length_0_times/nreps
+  prob_loop_length_at_least_once = 1 - prob_loop_length_0_times
+  return (prob_loop_length_at_least_once)
 }
