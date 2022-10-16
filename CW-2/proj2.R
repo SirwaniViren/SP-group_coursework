@@ -40,27 +40,30 @@ produce_random_numbered_boxes <- function(n, quantity) {
 # picks a box with their number on it, the second strategy where a prisoner
 # picks a random box to begin with, and the third strategy where a prisoner
 # picks n boxes at random, checking each card for their number
-strategy <- function(n, k, strategy, numbered_boxes){
-  success_strategy3 <- 0
-  if (strategy == 1)
-    first_box <- k
+strategy <- function(n, k, strategy, nreps,number_of_success,numbered_boxes){
+  #Let initial guess be k-prisoners' number
+  guess <- numbered_boxes[k]
+  if (strategy == 1) 
+    guess <- numbered_boxes[k] 
   else if (strategy == 2)
-    first_box <- produce_random_numbered_boxes(2 * n, 1)
+    guess <- produce_random_numbered_boxes(2 * n, 1)
   else if (strategy == 3) {
     random_box <- produce_random_numbered_boxes(2 * n, n)
-    for (box in random_box) {
+    for (box in random_box){
       #if one of the random boxes contains the prisoners number
       if (box == k){
         #count successes
-        success_strategy3 <- 1
+        number_of_success <- number_of_success + 1
         break
       }
     }
-    return (success_strategy3)
+    return(number_of_success)
   }
   #check the success 
-  check <- success_check(n, first_box, numbered_boxes)
-  return(check)
+  check <- success_check(n, k,numbered_boxes)
+  #if so, count the successes
+  number_of_success <- number_of_success + check
+  return(number_of_success)
 }
 
 # INPUT: n <- decides numbers of prisoners, k <- prisoner number, 
@@ -73,8 +76,16 @@ Pone <- function(n, k, strategy, nreps = 10000) {
     # index of numbered_boxes corresponds to the box number, and the value stored
     # at that index corresponds to the numbered card randomly placed in the box
     numbered_boxes <- produce_random_numbered_boxes(2 * n, 2 * n)
-    number_of_success <- number_of_success + 
-      strategy(n, k, strategy, numbered_boxes)
+    
+    if (strategy == 1) {
+      number_of_success=strategy(n, k, strategy, nreps,number_of_success, numbered_boxes)
+    }
+    else if (strategy == 2) {
+      number_of_success=strategy(n, k, strategy, nreps,number_of_success, numbered_boxes)
+    }
+    else if (strategy == 3) {
+      number_of_success=strategy(n, k, strategy, nreps,number_of_success, numbered_boxes)
+    }
   }
   prob_one_estimate <- number_of_success / nreps
   return (prob_one_estimate)
@@ -230,6 +241,18 @@ dloop <- function(n, nreps = 10000) {
 # example code for dloop
 # dloop(50,10000)
 
+# Here n=50. For the prisoners to be successful, the longest loop must not be greater than
+# 50. The probability of not having a loop longer than 50 is equal to the probability
+# of a random permutation of the prisoner numbers 1 to 100 having a loop whose length is
+# greater than 50. We first need to know the number of permutations of prisoner
+# numbers 1 to 100 with a loop of length x>50. That is 100!/x. The probability of 
+# of a random permutation containing no loops of length greater than 50 is 
+# calculated below:
+
+single_events <- factorial(100)*(1/(51:100))
+sum_single_events <- sum(single_events)
+prob_no_greater_50 <- 1 - (1/factorial(100))*sum_single_events
+cat("The probability of no loop being longer than 50 is:", prob_no_greater_50)
 
 # We use a line graph to visualize the probabilities for each loop length. A line
 # graph is used her since we can identify trends in the data. Usually line graphs are
