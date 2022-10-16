@@ -233,3 +233,38 @@ dloop <- function(n, nreps = 10000) {
   prob_loop_length_at_least_once = 1 - prob_loop_length_0_times
   return (prob_loop_length_at_least_once)
 }
+
+
+# cat("Probability of loop length from 1 to 2n occurring at least once in a random shuffling of cards to boxes: ")
+# cat("\nFor n=50: ", dloop(50))
+
+# example code for dloop
+# dloop(50,10000)
+
+# For n=50, no loop longer than 50 can occur. 
+
+
+# We use a line graph to visualize the probabilities for each loop length. A line
+# graph is used her since we can identify trends in the data. Usually line graphs are
+# used to track changes over a short or long period of time. But it can be used in
+# this scenario.
+n1 <- 50
+loop_vector1 <- dloop(n=n1,nreps=10000)
+line_graph <- plot(x= 1:(2*n1),
+                   y=loop_vector1, 
+                   type="o",
+                   xlab="Loop length",
+                   ylab="Probability of Loop length",
+                   main= "probability of each loop length from 1 to 2n occurring at least once")
+
+# A bar chart could be used to compare the different loop lengths. 
+# The code is not too different here. Bar-chart may seem a bit cramped
+n2 <- 50
+loop_vector2 <- dloop(n=n2,nreps=10000)
+bar_chart <- barplot(height=loop_vector2, 
+                     xlab="Loop length",
+                     ylab="Probability of Loop length",
+                     main= "probability of each loop length from 1 to 2n occurring at least once",
+                     space=0)
+axis(side=1,at=c(0,(2*n2)))
+
