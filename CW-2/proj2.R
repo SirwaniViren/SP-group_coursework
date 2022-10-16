@@ -78,13 +78,13 @@ Pone <- function(n, k, strategy, nreps = 10000) {
     numbered_boxes <- produce_random_numbered_boxes(2 * n, 2 * n)
     
     if (strategy == 1) {
-      number_of_success=strategy1(n, k, strategy, nreps,number_of_success,numbered_boxes)
+      number_of_success=strategy(n, k, strategy, nreps,number_of_success,numbered_boxes)
     }
     else if (strategy == 2) {
-      number_of_success=strategy2(n, k, strategy, nreps,number_of_success,numbered_boxes)
+      number_of_success=strategy(n, k, strategy, nreps,number_of_success,numbered_boxes)
     }
     else if (strategy == 3) {
-      number_of_success=strategy3(n, k, strategy, nreps,number_of_success)
+      number_of_success=strategy(n, k, strategy, nreps,number_of_success)
     }
   }
   prob_one_estimate <- number_of_success / nreps
