@@ -114,32 +114,6 @@ Pall <- function(n, strategy, nreps = 10000) {
       check <- check_success_given_strategy(n, prisoner_number, strategy, numbered_boxes)
       if (check == 0)
         break
-      # if (strategy == 1) {
-      #   check <- success_check(n, prisoner_number, numbered_boxes)
-      #   if (check == 0)
-      #     break
-      # }
-      # else if (strategy == 2) {
-      #   random_start_box <- produce_random_numbered_boxes(2 * n, 1)
-      #   check <- success_check(n, random_start_box, numbered_boxes)
-      #   if (check == 0)
-      #     break
-      # }
-      # else if (strategy == 3) {
-      #   #picking n boxes at random
-      #   random_box <- produce_random_numbered_boxes(2 * n, n)
-      #   check <- 0
-      #   for (box in random_box) {
-      #     #if this random box contains the prisoners number
-      #     if (box == prisoner_number) {
-      #       check = 1
-      #       break
-      #     }
-      #   }
-      #   if (check == 0) {
-      #     break
-      #   }
-      # }
     }
     number_of_success <- number_of_success + check
   }
@@ -234,9 +208,6 @@ dloop <- function(n, nreps = 10000) {
 
 cat("Probability of loop length from 1 to 2n occurring at least once in a random shuffling of cards to boxes: ")
 cat("\nFor n=50: ", dloop(50))
-
-# example code for dloop
-# dloop(50,10000)
 
 # Here n=50. For the prisoners to be successful, the longest loop must not be greater than
 # 50. The probability of not having a loop longer than 50 is equal to the probability
