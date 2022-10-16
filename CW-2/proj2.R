@@ -10,23 +10,36 @@
 # Purpose: Is to find and track the number of successes for us to calculate
 # the probabilities in later functions. Also code isn't repeated in later functions
 success_check <- function(n, k, numbered_boxes) {
+  # number of boxes opened by prisoner
   number_of_attempts <- 0
-  success <- 0
+  # value 1 indicates prisoner number found, 0 otherwise
+  number_of_success <- 0
+  # first box opened corresponds to value of k, depending on strategy used, could be 
+  # random or prisoners number
   guess <- numbered_boxes[k]
+  # while loop checks if number of boxes opened is less than or equal to n
   while (number_of_attempts <= n) {
     if (guess == k) {
-      success <- 1
+      # if prisoner number found, no need to continue looking
+      number_of_success <- 1
       break
     }
     else {
+      # move on to the next box as previous box did not contain prisoner number
       guess <- numbered_boxes[guess]
+      # number of attempts goes up by one as prisoner moves on to next box
       number_of_attempts <- number_of_attempts + 1
     }
   }
   
-  return (success)
+  return (number_of_success)
 }
 
+# INPUT: n <- decides numbers of prisoners, quantity <- number of items to choose
+# OUTPUT: vector of integers of length 'quantity'
+# PURPOSE: produce a vector of box numbers of a particular size depending on 
+# the strategy. Strategy 2 would require us to return just one box number while 
+# strategy 3 requires us to return n random box numbers
 produce_random_numbered_boxes <- function(n, quantity) {
   return (sample(1:n, quantity))
 }
@@ -42,11 +55,16 @@ produce_random_numbered_boxes <- function(n, quantity) {
 # picks n boxes at random, checking each card for their number
 check_success_given_strategy <- function(n, k, strategy, numbered_boxes){
   success_strategy3 <- 0
+  # if and else if to select the correct strategy
   if (strategy == 1)
+    # first box picked has prisoners number on it
     first_box <- k
   else if (strategy == 2)
+    # pick a box with a random number on it by calling the helper function 
+    # 'produce_random_numbered_boxes'
     first_box <- produce_random_numbered_boxes(2 * n, 1)
   else if (strategy == 3) {
+    # here we need n random boxes, the aforementioned helper function is used again
     random_box <- produce_random_numbered_boxes(2 * n, n)
     for (box in random_box) {
       #if one of the random boxes contains the prisoners number
@@ -58,7 +76,7 @@ check_success_given_strategy <- function(n, k, strategy, numbered_boxes){
     }
     return (success_strategy3)
   }
-  #check the success 
+  #check the success, used for strategy 1 and 2
   check <- success_check(n, first_box, numbered_boxes)
   return(check)
 }
@@ -76,6 +94,8 @@ Pone <- function(n, k, strategy, nreps = 10000) {
     number_of_success <- number_of_success + 
       check_success_given_strategy(n, k, strategy, numbered_boxes)
   }
+  # we divide number_of_success by nreps to get a probability of a single prisoner
+  # finding their number
   prob_one_estimate <- number_of_success / nreps
   return (prob_one_estimate)
 }
@@ -269,4 +289,6 @@ bar_chart <- barplot(height=loop_vector2,
                      ylab="Probability of Loop length",
                      main= "probability of each loop length from 1 to 2n occurring at least once",
                      space=0)
-axis(side=1,at=c(0,(2*n2)))
+# Adds an axis to the current plot
+axis(side=1,at=c(0,(2*n2)), tick=TRUE)
+
