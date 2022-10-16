@@ -233,6 +233,19 @@ cat("\nFor n=50: ", dloop(50))
 # example code for dloop
 # dloop(50,10000)
 
+# Here n=50. For the prisoners to be successful, the longest loop must not be greater than
+# 50. The probability of not having a loop longer than 50 is equal to the probability
+# of a random permutation of the prisoner numbers 1 to 100 having a loop whose length is
+# greater than 50. We first need to know the number of permutations of prisoner
+# numbers 1 to 100 with a loop of length x>50. That is 100!/x. The probability of 
+# of a random permutation containing no loops of length greater than 50 is 
+# calculated below:
+
+single_events <- factorial(100)*(1/(51:100))
+sum_single_events <- sum(single_events)
+prob_no_greater_50 <- 1 - (1/factorial(100))*sum_single_events
+cat("The probability of no loop being longer than 50 is:", prob_no_greater_50)
+
 
 # We use a line graph to visualize the probabilities for each loop length. A line
 # graph is used her since we can identify trends in the data. Usually line graphs are
