@@ -138,16 +138,18 @@ cat("\nStrategy 2:", Pall(50, 2))
 cat("\nStrategy 3:", Pall(50, 3))
 
 # For Pone evidently the less people there are (the smaller that n is) the better 
-# chance of success. Although Strategy 3 yields almost consistently similar 
-# results as after all we are still only observing n boxes with 2*n prisoners.
+# chance of success, which is expected.
 
-# Pall is where we observe a surprising result. Strategy 3 yields zero/near zero
-# probabilities. Strategy 1 and 2 yields an approximate probability of 33% and 52% when
-# n=50 and n=5 respectively. This seems to be the most optimal strategy, but why?
-# This is due to a cycle.
-# Every box leads to another box and eventually loops back to the prisoner number,
-# this is guaranteed. What is not guaranteed is the cycle which contains the 
-# prisoner number may have a length greater than n.
+# Pall is where we observe a surprising result. 
+# Strategy 2 and 3 yield zero/near zero probabilities. Strategy 1 yields an
+# approximate probability of 30% and 36% for n=50 and n=5 respectively.
+# This seems to be the most optimal strategy.
+# Strategy 2 and 3 have an element of randomness to them, as a result there 
+# is no guarantee to even eventually find the correct prisoner number.
+# In strategy 1 every box leads to another and eventually loops back to the
+# prisoner number we began with, this is guaranteed. What is not guaranteed
+# is the cycle which contains the prisoner number may have a length greater 
+# than n.
 
 # INPUT: n <- decides numbers of prisoners, nreps <- number of times experiment is done
 # OUTPUT: 
