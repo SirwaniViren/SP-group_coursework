@@ -4,23 +4,23 @@
 # Git repo Link:
 # Team member contributions to project:
 
-# INPUT: n <- decides numbers of prisoners, k<- prisoner number, numbered_boxes <- numbered boxes
+# INPUT: n <- decides numbers of prisoners, prisoner_number<- prisoner number, numbered_boxes <- numbered boxes
 # OUTPUT: the number of successes
 # Purpose: Is to find and track the number of successes for us to calculate
 # the probabilities in later functions. Also, so code isn't repeated in later functions
-success_check <- function(n, k, numbered_boxes) {
+success_check <- function(n, prisoner_number, first_box, numbered_boxes) {
   # number of boxes opened by prisoner
   number_of_attempts <- 0
   # value 1 indicates prisoner number found, 0 otherwise
-  number_of_success <- 0
+  success <- 0
   # first box opened corresponds to value of k, depending on strategy used, could be 
   # random or prisoners number
-  guess <- numbered_boxes[k]
+  guess <- numbered_boxes[first_box]
   # while loop checks if number of boxes opened is less than or equal to n
-  while (number_of_attempts <= n) {
-    if (guess == k) {
+  while (number_of_attempts < n) {
+    if (guess == prisoner_number) {
       # if prisoner number found, no need to continue looking
-      number_of_success <- 1
+      success <- 1
       break
     }
     else {
@@ -31,7 +31,7 @@ success_check <- function(n, k, numbered_boxes) {
     }
   }
   
-  return (number_of_success)
+  return (success)
 }
 
 # INPUT: n <- decides numbers of prisoners, quantity <- number of items to choose
@@ -74,7 +74,7 @@ check_success_given_strategy <- function(n, k, strategy, numbered_boxes){
     return (success_strategy3)
   }
   # check the success, used for strategy 1 and 2
-  check <- success_check(n, first_box, numbered_boxes)
+  check <- success_check(n, k, first_box, numbered_boxes)
   return(check)
 }
 
