@@ -108,16 +108,24 @@ Pall <- function(n, strategy, nreps = 10000) {
     # prisoner leaves
     numbered_boxes <- produce_random_numbered_boxes(2 * n, 2 * n)
     for (prisoner_number in 1:(2 * n)) {
+      # calls on helper function to check if the chosen strategy has been 
+      # successful or not. A 1 would be success, 0 otherwise
       check <- check_success_given_strategy(n, prisoner_number, strategy, numbered_boxes)
+      # if check == 0 then one of the prisoners was unable to find their number
+      # this means none of the prisoners go free, so, we stop the loop entirely
       if (check == 0)
         break
     }
+    # add 1 to number_of_success if prisoner finds number
     number_of_success <- number_of_success + check
   }
   
+  # divide by total number of repetitions to get probability of everybody succeeding 
   prob_all_estimate <- number_of_success / nreps
   return (prob_all_estimate)
 }
+
+# example code of the 'Pone' and 'Pall' are provided below:
 
 cat("Probability estimate of a single prisoner succeeding in finding their number:")
 cat("\nn=5\nStrategy 1:", Pone(5, 7, 1))
@@ -198,11 +206,16 @@ dloop <- function(n, nreps = 10000) {
     count_loop_length_0_times[index_loop_length_0_times] = 
       count_loop_length_0_times[index_loop_length_0_times] + 1
   }
+  # in the following two lines we take the count of the cycles that happened 
+  # zero times and divide by number of repetitions to get a probability
+  # of cycles happening zero times. We then subtract these values from 1 to get
+  # probability of the cycles happening at least 1 time
   prob_loop_length_0_times <- count_loop_length_0_times/nreps
   prob_loop_length_at_least_once <- 1 - prob_loop_length_0_times
   return (prob_loop_length_at_least_once)
 }
 
+# example code for 'dloop' provided below:
 
 cat("Probability of loop length from 1 to 2n occurring at least once in a random shuffling of cards to boxes: ")
 cat("\nFor n=50: ", dloop(50))
@@ -215,7 +228,9 @@ cat("\nFor n=50: ", dloop(50))
 # of a random permutation containing no loops of length greater than 50 is 
 # calculated below:
 
+# number of permutations with cycle length x>50
 single_events <- factorial(100)*(1/(51:100))
+# simple sum of all the values in vector
 sum_single_events <- sum(single_events)
 prob_no_greater_50 <- 1 - (1/factorial(100))*sum_single_events
 cat("The probability of no loop being longer than 50 is:", prob_no_greater_50)
