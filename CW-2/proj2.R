@@ -4,10 +4,12 @@
 # Git repo Link:
 # Team member contributions to project:
 
-# INPUT: n <- decides numbers of prisoners, prisoner_number<- prisoner number, numbered_boxes <- numbered boxes
-# OUTPUT: the number of successes
-# Purpose: Is to find and track the number of successes for us to calculate
-# the probabilities in later functions. Also, so code isn't repeated in later functions
+# INPUT: n <- decides numbers of prisoners, prisoner_number<- prisoner number, 
+# first_box <- first box picked by prisoner, depending on strategy , 
+# numbered_boxes <- numbered boxes taken from random sample
+# OUTPUT: 1 or 0 for success or not success respectively
+# Purpose: returns 1 or 0 as stated above to tell us if the prisoners have
+# been successful in finding their number. Also, so code isn't repeated in later functions
 success_check <- function(n, prisoner_number, first_box, numbered_boxes) {
   # number of boxes opened by prisoner
   number_of_attempts <- 0
@@ -31,6 +33,7 @@ success_check <- function(n, prisoner_number, first_box, numbered_boxes) {
     }
   }
   
+  # 1 or 0, depending on if all prisoner numbers have been found
   return (success)
 }
 
@@ -160,8 +163,9 @@ cat("\nStrategy 3:", Pall(50, 3))
 # than n.
 
 # INPUT: n <- decides numbers of prisoners, nreps <- number of times experiment is done
-# OUTPUT: 
-# PURPOSE: 
+# OUTPUT: probability of each loop length from 1 to 2n occurring at least once 
+# PURPOSE: here we estimate by simulation the probability of each loop length
+# occurring at least once in a random shuffling of the prisoner numbers 
 dloop <- function(n, nreps = 10000) {
   # count of all the cycles with loop length 1 to 2n that occurred 0 times 
   # in the simulation
