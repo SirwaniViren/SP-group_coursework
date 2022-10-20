@@ -1,8 +1,30 @@
 # Karman Singh s1936373
 # Viren Sirwani Mulani s1949143
 # Alannah Hounat s2434943
-# Git repo Link:
+
+# Git repo Link: https://github.com/SirwaniViren/SP-group_coursework/tree/main/CW-2
+
 # Team member contributions to project:
+# Each member was in charge of individual questions. Some questions involved the 
+# collaboration of multiple members of the group.
+
+# The questions that were done individually are shown below:
+# Viren Sirwani Mulani s1949143: Q6
+# Karman Singh s1936373: Q5
+# Alannah Hounat s2434943: Q3, Q4
+
+# Questions that members worked on together are the following:
+# Karman Singh s1936373, Viren Sirwani Mulani s1949143, Alannah Hounat s2434943 - Q1, Q2
+
+# Overview of Code: Given the 2n prisoners problem. An R script to evaluate the 
+# different probabilities of a prisoner being set free given that they must check n boxes from
+# 2n boxes using one of three strategies.
+# 3 strategies:
+# 1. Prisoner opens first box with their number on the outside. If it doesn't contain their number
+# the next box they open starts with the number revealed in the first box
+# 2. the same as strategy 1 except the first box is a random box 
+# 3. They open n boxes at random checking for their number within the box 
+# We evaluate the probabilities of one prisoner being set free and all 2n prisoners being set free
 
 # Overview of Code: Given the 2n prisoners problem. An R script to evaluate the 
 # different probabilities of a prisoner being set free given that they must check 
@@ -29,10 +51,10 @@ success_check <- function(n, prisoner_number, first_box, numbered_boxes) {
   number_of_attempts <- 0
   # value 1 indicates prisoner number found, 0 otherwise
   success <- 0
-  # first box opened corresponds to value of k, depending on strategy used, could be 
+  # first box opened corresponds to value of first_box value, depending on strategy used, could be 
   # random or prisoners number
   guess <- numbered_boxes[first_box]
-  # while loop checks if number of boxes opened is less than or equal to n
+  # while loop checks if number of boxes opened is less than n
   while (number_of_attempts < n) {
     if (guess == prisoner_number) {
       # if prisoner number found, no need to continue looking
@@ -47,13 +69,13 @@ success_check <- function(n, prisoner_number, first_box, numbered_boxes) {
     }
   }
   
-  # 1 or 0, depending on if all prisoner numbers have been found
+  # 1 or 0, depending on if prisoner number has been found
   return (success)
 }
 
-# INPUT: n <- decides numbers of prisoners, quantity <- number of items to choose
+# INPUT: n <- total number of prisoners, quantity <- number of items to choose
 # OUTPUT: vector of integers of length 'quantity'
-# PURPOSE: produce a vector of box numbers of a particular size depending on 
+# PURPOSE: produce a random vector of box numbers of a particular size depending on 
 # the strategy. Strategy 2 would require us to return just one box number while 
 # strategy 3 requires us to return n random box numbers
 produce_random_numbered_boxes <- function(n, quantity) {
@@ -83,7 +105,7 @@ check_success_given_strategy <- function(n, k, strategy, numbered_boxes){
     for (box in random_box) {
       # if one of the random boxes contains the prisoners number
       if (box == k){
-        # count successes
+        # if prisoner number found, no need to continue looking
         success_strategy3 <- 1
         break
       }
@@ -101,6 +123,7 @@ check_success_given_strategy <- function(n, k, strategy, numbered_boxes){
 # PURPOSE: To find the probability of one prisoner finding their number
 Pone <- function(n, k, strategy, nreps = 10000) {
   number_of_success <- 0
+  # iterating over nreps experiments
   for (reps in 1:nreps) {
     # index of numbered_boxes corresponds to the box number, and the value stored
     # at that index corresponds to the numbered card randomly placed in the box
@@ -144,21 +167,23 @@ Pall <- function(n, strategy, nreps = 10000) {
 
 # example code of the 'Pone' and 'Pall' are provided below:
 
-cat("Probability estimate of a single prisoner succeeding in finding their number:")
-cat("\nn=5\nStrategy 1:", Pone(5, 7, 1))
+cat("Probability estimate of a single prisoner succeeding in finding their number when n=5:")
+cat("nStrategy 1:", Pone(5, 7, 1))
 cat("\nStrategy 2:", Pone(5, 7, 2))
 cat("\nStrategy 3:", Pone(5, 7, 3))
 
-cat("\nn=50\nStrategy 1:", Pone(50, 7, 1))
+cat("Probability estimate of a single prisoner succeeding in finding their number when n=50:")
+cat("\nStrategy 1:", Pone(50, 7, 1))
 cat("\nStrategy 2:", Pone(50, 7, 2))
 cat("\nStrategy 3:", Pone(50, 7, 3))
 
-cat("\nProbability estimate of all prisoners succeeding in finding their numbers:")
-cat("\nn=5\nStrategy 1:", Pall(5, 1))
+cat("\nProbability estimate of all prisoners succeeding in finding their numbers when n=5:")
+cat("\nStrategy 1:", Pall(5, 1))
 cat("\nStrategy 2:", Pall(5, 2))
 cat("\nStrategy 3:", Pall(5, 3))
 
-cat("\nn=50\nStrategy 1:", Pall(50, 1))
+cat("\nProbability estimate of all prisoners succeeding in finding their numbers when n=50:")
+cat("\nStrategy 1:", Pall(50, 1))
 cat("\nStrategy 2:", Pall(50, 2))
 cat("\nStrategy 3:", Pall(50, 3))
 
