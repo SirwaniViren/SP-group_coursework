@@ -4,6 +4,17 @@
 # Git repo Link:
 # Team member contributions to project:
 
+# Overview of Code: Given the 2n prisoners problem. An R script to evaluate the 
+# different probabilities of a prisoner being set free given that they must check n boxes from
+# 2n boxes using one of three strategies.
+# 3 strategies:
+# 1. Prisoner opens first box with their number on the outside. If it doesn't contain their number
+# the next box they open starts with the number revealed in the first box
+# 2. the same as strategy 1 except the first box is a random box 
+# 3. They open n boxes at random checking for their number within the box 
+# We evaluate the probabilities of one prisoner being set free and all 2n prisoners being set free
+# 
+
 # INPUT: n <- decides numbers of prisoners, prisoner_number<- prisoner number, 
 # first_box <- first box picked by prisoner, depending on strategy , 
 # numbered_boxes <- numbered boxes taken from random sample
