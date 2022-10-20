@@ -98,6 +98,7 @@ check_success_given_strategy <- function(n, k, strategy, numbered_boxes){
 # PURPOSE: To find the probability of one prisoner finding their number
 Pone <- function(n, k, strategy, nreps = 10000) {
   number_of_success <- 0
+  # iterating over nreps experiments
   for (reps in 1:nreps) {
     # index of numbered_boxes corresponds to the box number, and the value stored
     # at that index corresponds to the numbered card randomly placed in the box
@@ -141,21 +142,23 @@ Pall <- function(n, strategy, nreps = 10000) {
 
 # example code of the 'Pone' and 'Pall' are provided below:
 
-cat("Probability estimate of a single prisoner succeeding in finding their number:")
-cat("\nn=5\nStrategy 1:", Pone(5, 7, 1))
+cat("Probability estimate of a single prisoner succeeding in finding their number when n=5:")
+cat("nStrategy 1:", Pone(5, 7, 1))
 cat("\nStrategy 2:", Pone(5, 7, 2))
 cat("\nStrategy 3:", Pone(5, 7, 3))
 
-cat("\nn=50\nStrategy 1:", Pone(50, 7, 1))
+cat("Probability estimate of a single prisoner succeeding in finding their number when n=50:")
+cat("\nStrategy 1:", Pone(50, 7, 1))
 cat("\nStrategy 2:", Pone(50, 7, 2))
 cat("\nStrategy 3:", Pone(50, 7, 3))
 
-cat("\nProbability estimate of all prisoners succeeding in finding their numbers:")
-cat("\nn=5\nStrategy 1:", Pall(5, 1))
+cat("\nProbability estimate of all prisoners succeeding in finding their numbers when n=5:")
+cat("\nStrategy 1:", Pall(5, 1))
 cat("\nStrategy 2:", Pall(5, 2))
 cat("\nStrategy 3:", Pall(5, 3))
 
-cat("\nn=50\nStrategy 1:", Pall(50, 1))
+cat("\nProbability estimate of all prisoners succeeding in finding their numbers when n=50:")
+cat("\nStrategy 1:", Pall(50, 1))
 cat("\nStrategy 2:", Pall(50, 2))
 cat("\nStrategy 3:", Pall(50, 3))
 
