@@ -26,10 +26,10 @@ success_check <- function(n, prisoner_number, first_box, numbered_boxes) {
   number_of_attempts <- 0
   # value 1 indicates prisoner number found, 0 otherwise
   success <- 0
-  # first box opened corresponds to value of k, depending on strategy used, could be 
+  # first box opened corresponds to value of first_box value, depending on strategy used, could be 
   # random or prisoners number
   guess <- numbered_boxes[first_box]
-  # while loop checks if number of boxes opened is less than or equal to n
+  # while loop checks if number of boxes opened is less than n
   while (number_of_attempts < n) {
     if (guess == prisoner_number) {
       # if prisoner number found, no need to continue looking
@@ -44,13 +44,13 @@ success_check <- function(n, prisoner_number, first_box, numbered_boxes) {
     }
   }
   
-  # 1 or 0, depending on if all prisoner numbers have been found
+  # 1 or 0, depending on if prisoner number has been found
   return (success)
 }
 
-# INPUT: n <- decides numbers of prisoners, quantity <- number of items to choose
+# INPUT: n <- total number of prisoners, quantity <- number of items to choose
 # OUTPUT: vector of integers of length 'quantity'
-# PURPOSE: produce a vector of box numbers of a particular size depending on 
+# PURPOSE: produce a random vector of box numbers of a particular size depending on 
 # the strategy. Strategy 2 would require us to return just one box number while 
 # strategy 3 requires us to return n random box numbers
 produce_random_numbered_boxes <- function(n, quantity) {
@@ -80,7 +80,7 @@ check_success_given_strategy <- function(n, k, strategy, numbered_boxes){
     for (box in random_box) {
       # if one of the random boxes contains the prisoners number
       if (box == k){
-        # count successes
+        # if prisoner number found, no need to continue looking
         success_strategy3 <- 1
         break
       }
