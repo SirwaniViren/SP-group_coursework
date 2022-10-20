@@ -25,6 +25,9 @@
 # 2. the same as strategy 1 except the first box is a random box 
 # 3. They open n boxes at random checking for their number within the box 
 # We evaluate the probabilities of one prisoner being set free and all 2n prisoners being set free
+# Then, based off the logic in a surprising strategy we evaluated the probability
+# of each loop length occurring at least once and thus visualizing these 
+# probabilities on a graph
 
 # Overview of Code: Given the 2n prisoners problem. An R script to evaluate the 
 # different probabilities of a prisoner being set free given that they must check 
