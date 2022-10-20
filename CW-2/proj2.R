@@ -1,8 +1,20 @@
 # Karman Singh s1936373
 # Viren Sirwani Mulani s1949143
 # Alannah Hounat s2434943
-# Git repo Link:
+
+# Git repo Link: https://github.com/SirwaniViren/SP-group_coursework/tree/main/CW-2
+
 # Team member contributions to project:
+# Each member was in charge of individual questions. Some questions involved the 
+# collaboration of multiple members of the group.
+
+# The questions that were done individually are shown below:
+# Viren Sirwani Mulani s1949143: Q6
+# Karman Singh s1936373: Q5
+# Alannah Hounat s2434943: Q3, Q4
+
+# Questions that members worked on together are the following:
+# Karman Singh s1936373, Viren Sirwani Mulani s1949143, Alannah Hounat s2434943 - Q1, Q2
 
 # Overview of Code: Given the 2n prisoners problem. An R script to evaluate the 
 # different probabilities of a prisoner being set free given that they must check n boxes from
@@ -13,7 +25,6 @@
 # 2. the same as strategy 1 except the first box is a random box 
 # 3. They open n boxes at random checking for their number within the box 
 # We evaluate the probabilities of one prisoner being set free and all 2n prisoners being set free
-# 
 
 # INPUT: n <- decides numbers of prisoners, prisoner_number<- prisoner number, 
 # first_box <- first box picked by prisoner, depending on strategy , 
