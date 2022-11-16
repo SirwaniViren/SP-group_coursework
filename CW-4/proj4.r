@@ -8,18 +8,19 @@
 # grad -> gradient function , eps -> the finite difference intervals when hessian
 #function is not provided
 #OUTPUT: A hessian matrix 
-fin_dif_hess <- function(theta, grad, eps){
+finite_diff_hess <- function(theta, grad, eps, ...){
+  grad <- gb
   n <- length(theta)
+  grad0 <- grad(theta) ## grad of nll at th0
   hess_temp <- matrix(0, n, n)
   for(i in 1:n){
-    th1 <- theta; th1[i] <- th1[i] + eps ## increase th0[i] by eps
-    gll1 <- gb(th1) ## compute resulting nll
-    hess_temp[i,] <- (gll1 - gll0)/eps ## approximate second derivs
+    th1 <- theta; th1[i] <- th1[i] + eps ## increase th1[i] by eps
+    grad1 <- grad(th1) ## compute resulting nll
+    hess_temp[i,] <- (grad1 - grad0)/eps ## approximate second derivs
   }
   
   hess <- (t(hess_temp) + hess_temp)/2
   return (hess)
-  
 }
 
 #INPUT: theta -> initial values for optinisation parameters, 
@@ -34,42 +35,34 @@ fin_dif_hess <- function(theta, grad, eps){
 # possible values for theta when func = rb => c(-.5,1)
 newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1, 
                  maxit = 100, max.half = 20, eps = 1e-6) {
-  gll0 <- gb(theta) ## grad of nll at th0
   n <- length(theta)
   if (is.null(hess)) {
-    hess <- matrix(0,n,n) ## finite diference Hessian
-    for (i in 1:n) { ## loop over parameters
-      th1 <- theta; th1[i] <- th1[i] + eps ## increase th0[i] by eps
-      gll1 <- gb(th1) ## compute resulting nll
-      hess[i,] <- (gll1 - gll0)/eps ## approximate second derivs
-    }
-    
+    print("fdfd")
+    hess <- finite_diff_hess(theta, grad, eps)
   }
-  while (any(abs(gb(theta)) > (tol * (abs(rb(theta)) + fscale)))) {
+  iterations <- 0
+  while (any(abs(grad(theta)) > (tol * (abs(func(theta)) + fscale)))) {
     iterations <- iterations + 1
-    hess <- hb(theta)
-    eig_values <- eigen(hess)$values
+    hess_val <- hess(theta)
+    eig_values <- eigen(hess_val)$values
     preturb_val <- 0
     check_max_half <- 0
     while (any(eig_values < 0)) {
       preturb_val <- preturb_val + 1
-      new_hess <- hess + preturb_val*diag(n)
+      new_hess <- hess_val + preturb_val*diag(n)
       eig_values <- eigen(new_hess)$values
     }
-    hess <- hess + preturb_val*diag(n)
-    delta <- -chol2inv(chol(hess)) %*% gb(theta)
-    while (rb(theta + delta) >= rb(theta)) {
+    hess_val <- hess_val + preturb_val*diag(n)
+    delta <- -chol2inv(chol(hess_val)) %*% grad(theta)
+    while (func(theta + delta) >= func(theta)) {
       check_max_half <- check_max_half + 1
       delta <- delta/2
     }
     delta_t <- t(delta)
     theta <- theta + delta
     cat("Number of max half:", check_max_half, "Number of iterations:", iterations)
-    cat("",theta, " ", rb(theta), "\n")
+    cat("",theta, " ", func(theta), "\n")
   }
-  
-  #return(list(f0,theta, iterations,grad))
-  
 }
 
 # RUN CODE UNDER THIS
@@ -101,45 +94,28 @@ n <- length(theta)
 obj_func_at_theta <- rb(theta)
 iterations <- 0
 
-#function to check if the Hessian matrix is positive definite 
-posdef_check<-function(Hessian){
-  check <-0
-  count <-0
-  while(check!=1){
-    I<-diag(Hessian)
-    count<- count +1
-    if(count>)
-    
+
+#
+while (any(abs(gb(theta)) > (tol * (abs(rb(theta)) + fscale)))) {
+  iterations <- iterations + 1
+  hess <- hb(theta)
+  eig_values <- eigen(hess)$values
+  preturb_val <- 0
+  check_max_half <- 0
+  while (any(eig_values < 0)) {
+    preturb_val <- preturb_val + 1
+    new_hess <- hess + preturb_val*diag(n)
+    eig_values <- eigen(new_hess)$values
   }
+  hess <- hess + preturb_val*diag(n)
+  delta <- -chol2inv(chol(hess)) %*% gb(theta)
+  while (rb(theta + delta) >= rb(theta)) {
+    check_max_half <- check_max_half + 1
+    delta <- delta/2
+  }
+  delta_t <- t(delta)
+  theta <- theta + delta
+  cat("Number of max half:", check_max_half, "Number of iterations:", iterations)
+  cat("",theta, " ", rb(theta), "\n")
 }
-
-
-
-# while (any(abs(gb(theta)) > (tol * (abs(rb(theta)) + fscale)))) {
-#   iterations <- iterations + 1
-#   hess <- hb(theta)
-#   eig_values <- eigen(hess)$values
-#   preturb_val <- 0
-#   check_max_half <- 0
-#   while (any(eig_values < 0)) {
-#     preturb_val <- preturb_val + 1
-#     new_hess <- hess + preturb_val*diag(n)
-#     eig_values <- eigen(new_hess)$values
-#   }
-#   hess <- hess + preturb_val*diag(n)
-#   delta <- -chol2inv(chol(hess)) %*% gb(theta)
-#   while (rb(theta + delta) >= rb(theta)) {
-#     check_max_half <- check_max_half + 1
-#     delta <- delta/2
-#   }
-#   delta_t <- t(delta)
-#   theta <- theta + delta
-#   cat("Number of max half:", check_max_half, "Number of iterations:", iterations)
-#   cat("",theta, " ", rb(theta), "\n")
-# }
-
-newt(theta, func, grad, hess = NULL, tol = 1e-8, fscale = 1, 
-         maxit = 100, max.half = 20, eps = 1e-6)
-
-
 
