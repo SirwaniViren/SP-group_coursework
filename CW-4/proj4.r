@@ -4,7 +4,10 @@
 
 # Git repo Link: https://github.com/SirwaniViren/SP-group_coursework/tree/main/CW-4
 
-
+#INPUT: theta -> initial values for optinisation parameters
+# grad -> gradient function , eps -> the finite difference intervals when hessian
+#function is not provided
+#OUTPUT: A hessian matrix 
 fin_dif_hess <- function(theta, grad, eps){
   n <- length(theta)
   hess_temp <- matrix(0, n, n)
@@ -18,6 +21,15 @@ fin_dif_hess <- function(theta, grad, eps){
   return (hess)
   
 }
+
+#INPUT: theta -> initial values for optinisation parameters, 
+#func-> objective function to minimize, grad -> gradient function
+#hess-> hessian matrix function, tol-> convergence tolerance, 
+#fscale-> estimate of magnitude of func near optimum
+#maxit-> max amount of interations to perform , 
+#max.half ->max amount of times step can be halved
+#eps -> the finite difference intervals when hessian
+#OUTPUT: the minimized function
 
 # possible values for theta when func = rb => c(-.5,1)
 newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1, 
@@ -36,14 +48,17 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
 
 # RUN CODE UNDER THIS
 
+#given
 rb <- function(th,k=2) {
   k*(th[2]-th[1]^2)^2 + (1-th[1])^2
 }
 
+#given
 gb <- function(th,k=2) {
   c(-2*(1-th[1])-k*4*th[1]*(th[2]-th[1]^2),k*2*(th[2]-th[1]^2))
 }
 
+#given
 hb <- function(th,k=2) {
   h <- matrix(0,2,2)
   h[1,1] <- 2-k*2*(2*(th[2]-th[1]^2) - 4*th[1]^2)
@@ -60,6 +75,8 @@ n <- length(theta)
 obj_func_at_theta <- rb(theta)
 iterations <- 0
 
+
+#
 while (any(abs(gb(theta)) > (tol * (abs(rb(theta)) + fscale)))) {
   iterations <- iterations + 1
   hess <- hb(theta)
