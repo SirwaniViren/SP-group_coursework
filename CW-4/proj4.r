@@ -63,6 +63,7 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
     cat("Number of max half:", check_max_half, "Number of iterations:", iterations)
     cat("",theta, " ", func(theta), "\n")
   }
+  #return(list(f0,theta, iterations,grad))
 }
 
 # RUN CODE UNDER THIS
@@ -95,39 +96,44 @@ obj_func_at_theta <- rb(theta)
 iterations <- 0
 
 #creating function to test positive definite
-posdef_check<-function(Hessian){
-  check <-0
-  count <-0
-  while(check!=1){
-    I<-diag(Hessian)
-    count<- count +1
-    if(count>)
-      
-  }
-}
+# posdef_check<-function(Hessian,maxit){
+#   check <-0
+#   count <-0
+#   while(check!=1){
+#     I<-diag(Hessian)
+#     count<- count +1
+#     if(count>maxit) stop(" ") 
+#       #assign matrix, if it's +ve def , check +1
+#       #if it isnt +ve def check=0 (doesnt change) .... then since check!=1 it will loop again until check=1
+#   }
+# }
 
 
-#
-while (any(abs(gb(theta)) > (tol * (abs(rb(theta)) + fscale)))) {
-  iterations <- iterations + 1
-  hess <- hb(theta)
-  eig_values <- eigen(hess)$values
-  preturb_val <- 0
-  check_max_half <- 0
-  while (any(eig_values < 0)) {
-    preturb_val <- preturb_val + 1
-    new_hess <- hess + preturb_val*diag(n)
-    eig_values <- eigen(new_hess)$values
-  }
-  hess <- hess + preturb_val*diag(n)
-  delta <- -chol2inv(chol(hess)) %*% gb(theta)
-  while (rb(theta + delta) >= rb(theta)) {
-    check_max_half <- check_max_half + 1
-    delta <- delta/2
-  }
-  delta_t <- t(delta)
-  theta <- theta + delta
-  cat("Number of max half:", check_max_half, "Number of iterations:", iterations)
-  cat("",theta, " ", rb(theta), "\n")
-}
 
+
+# while (any(abs(gb(theta)) > (tol * (abs(rb(theta)) + fscale)))) {
+#   iterations <- iterations + 1
+#   hess <- hb(theta)
+#   eig_values <- eigen(hess)$values
+#   preturb_val <- 0
+#   check_max_half <- 0
+#   while (any(eig_values < 0)) {
+#     preturb_val <- preturb_val + 1
+#     new_hess <- hess + preturb_val*diag(n)
+#     eig_values <- eigen(new_hess)$values
+#   }
+#   hess <- hess + preturb_val*diag(n)
+#   delta <- -chol2inv(chol(hess)) %*% gb(theta)
+#   while (rb(theta + delta) >= rb(theta)) {
+#     check_max_half <- check_max_half + 1
+#     delta <- delta/2
+#   }
+#   delta_t <- t(delta)
+#   theta <- theta + delta
+#   cat("Number of max half:", check_max_half, "Number of iterations:", iterations)
+#   cat("",theta, " ", rb(theta), "\n")
+# }
+
+
+newt(theta, func, grad, hess = NULL, tol = 1e-8, fscale = 1, 
+     maxit = 100, max.half = 20, eps = 1e-6)
