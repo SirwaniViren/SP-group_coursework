@@ -101,6 +101,18 @@ n <- length(theta)
 obj_func_at_theta <- rb(theta)
 iterations <- 0
 
+#function to check if the Hessian matrix is positive definite 
+posdef_check<-function(Hessian){
+  check <-0
+  count <-0
+  while(check!=1){
+    I<-diag(Hessian)
+    count<- count +1
+    if(count>)
+    
+  }
+}
+
 
 
 # while (any(abs(gb(theta)) > (tol * (abs(rb(theta)) + fscale)))) {
