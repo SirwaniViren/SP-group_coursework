@@ -36,11 +36,16 @@ finite_diff_hess <- function(theta, grad, eps, ...){
 newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1, 
                  maxit = 100, max.half = 20, eps = 1e-6) {
   n <- length(theta)
+  # check if hessian matrix function is not provided
+  # if it is not, we obtain an approximation to the Hessian matrix function by 
+  # performing finite differencing of the gradient vector 
   if (is.null(hess)) {
     print("fdfd")
     hess <- finite_diff_hess(theta, grad, eps)
   }
+  # initializing the number of iterations count
   iterations <- 0
+  # while loop runs till convergence is not achieved
   while (any(abs(grad(theta)) > (tol * (abs(func(theta)) + fscale)))) {
     iterations <- iterations + 1
     hess_val <- hess(theta)
