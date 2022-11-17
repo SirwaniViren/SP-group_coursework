@@ -14,7 +14,7 @@ finite_diff_hess <- function(theta, grad, eps, ...){
   n <- length(theta)
   # gradient function at the initial theta
   grad0 <- grad(theta)
-  # finite diference Hessian, we first need to initialize it
+  # finite difference Hessian, we first need to initialize it
   hess_temp <- matrix(0, n, n)
   for(i in 1:n){
     # just make a copy of theta
@@ -26,7 +26,7 @@ finite_diff_hess <- function(theta, grad, eps, ...){
     hess_temp[i,] <- (grad1 - grad0)/eps 
   }
   
-  # use the fact that t(A)+A)/2 is exactly symmetric for any matrix A
+  # use the fact that t((A)+A)/2 is exactly symmetric for any matrix A
   hess <- (t(hess_temp) + hess_temp)/2
   return (hess)
 }
@@ -54,7 +54,8 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
   # if it is not, we obtain an approximation to the Hessian matrix function by 
   # performing finite differencing of the gradient vector 
   if (is.null(hess)) {
-    print("fdfd")
+    #print("fdfd")
+    warning('Hessian Matrix not provided, approximation provided')
     hess <- finite_diff_hess(theta, grad, eps)
   }
   
@@ -104,7 +105,8 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
     cat("Number of max half:", check_max_half, "Number of iterations:", iterations)
     cat("",theta, " ", func(theta), "\n")
   }
-  
+  if(iterations==maxit) warning("iteration limit reached")
+  if(check_max_half>20) warning('step has failed to improve the objective')
   # value of the objective function at the minimum
   f <- func(theta)
   # inverse of the Hessian matrix at the minimum
@@ -149,16 +151,3 @@ theta = c(-.5, 1)
 n <- length(theta)
 obj_func_at_theta <- rb(theta)
 iterations <- 0
-
-#creating function to test positive definite
-# posdef_check<-function(Hessian,maxit){
-#   check <-0
-#   count <-0
-#   while(check!=1){
-#     I<-diag(Hessian)
-#     count<- count +1
-#     if(count>maxit) stop(" ") 
-#       #assign matrix, if it's +ve def , check +1
-#       #if it isnt +ve def check=0 (doesnt change) .... then since check!=1 it will loop again until check=1
-#   }
-# }
