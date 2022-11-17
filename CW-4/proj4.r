@@ -69,7 +69,7 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
   while (any(abs(grad(theta, ...)) > (conv_thresh))) {
     # increase number of iterations by one
     iterations <- iterations + 1
-    if(iterations==maxit) warning("iteration limit reached")
+    if(iterations > maxit) stop("Iteration limit reached without convergence!")
     # Hessian matrix with initial theta values
     hess_val <- hess(theta, ...)
     # compute eigen values of hessian matrix
@@ -95,7 +95,9 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
     while (func(theta + delta, ...) >= func(theta, ...)) {
       # update the count for number of times step size is halved
       check_max_half <- check_max_half + 1
-      if(check_max_half>20) warning('step has failed to improve the objective')
+      if(check_max_half>20) {
+        stop('Step has failed to improve the objective!')
+      }
       # halve step size
       delta <- delta/2
     }
@@ -143,3 +145,5 @@ hb <- function(th,k=2) {
   h[1,2] <- h[2,1] <- -4*k*th[1]
   h
 }
+
+#newt(theta= c(1000,-237), func=rb, grad=gb, hess=hb, fscale=0)
