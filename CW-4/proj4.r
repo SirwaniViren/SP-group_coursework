@@ -13,7 +13,7 @@ finite_diff_hess <- function(theta, grad, eps, ...){
   # get length of vector of parameter values
   n <- length(theta)
   # gradient function at the initial theta
-  grad0 <- grad(theta,...)
+  grad0 <- grad(theta, ...)
   # finite difference Hessian, we first need to initialize it
   hess_temp <- matrix(0, n, n)
   for(i in 1:n){
@@ -21,7 +21,7 @@ finite_diff_hess <- function(theta, grad, eps, ...){
     # and also increase th1[i] by eps
     th1 <- theta; th1[i] <- th1[i] + eps 
     # compute resulting gradient function
-    grad1 <- grad(th1,...)
+    grad1 <- grad(th1, ...)
     # approximate second derivatives
     hess_temp[i,] <- (grad1 - grad0)/eps 
   }
@@ -46,7 +46,7 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
   
   # check if the objective or derivatives are not finite at the initial theta
   # a warning is issued if that is the case
-  if (abs(func(theta,...)) == Inf | any(abs(grad(theta,...)) == Inf)){
+  if (abs(func(theta, ...)) == Inf | any(abs(grad(theta, ...)) == Inf)){
     warning("objective or derivatives are not finite at the initial theta")
   }
   
@@ -55,7 +55,7 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
   # performing finite differencing of the gradient vector 
   if (is.null(hess)) {
     warning('Hessian Matrix not provided, approximation provided')
-    hess <- finite_diff_hess(theta, grad, eps)
+    hess <- finite_diff_hess(theta, grad, eps, ...)
   }
   
   # initializing the number of iterations count
@@ -63,15 +63,15 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
   # Convergence should be judged by seeing whether all elements of the gradient 
   # vector have absolute value less than tol times the absolute value of the 
   # objective function plus fscale 
-  conv_thresh <- tol * (abs(func(theta,...)) + fscale)
+  conv_thresh <- tol * (abs(func(theta, ...)) + fscale)
   
   # while loop runs till convergence is not achieved
-  while (any(abs(grad(theta)) > (conv_thresh))) {
+  while (any(abs(grad(theta, ...)) > (conv_thresh))) {
     # increase number of iterations by one
     iterations <- iterations + 1
     if(iterations==maxit) warning("iteration limit reached")
     # Hessian matrix with initial theta values
-    hess_val <- hess(theta)
+    hess_val <- hess(theta, ...)
     # compute eigen values of hessian matrix
     eig_values <- eigen(hess_val)$values
     # perturbation value to force hessian to be positive definite
@@ -90,9 +90,9 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
     hess_val <- hess_val + preturb_val*diag(n)
     # A descent direction is one in which a sufficiently small step will 
     # decrease the objective function
-    delta <- -chol2inv(chol(hess_val)) %*% grad(theta,...)
+    delta <- -chol2inv(chol(hess_val)) %*% grad(theta, ...)
     # while loop to halve step size until objective function decreases
-    while (func(theta + delta,...) >= func(theta,...)) {
+    while (func(theta + delta, ...) >= func(theta, ...)) {
       # update the count for number of times step size is halved
       check_max_half <- check_max_half + 1
       if(check_max_half>20) warning('step has failed to improve the objective')
@@ -108,11 +108,11 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
     cat("",theta, " ", func(theta,...), "\n")
   }
   # value of the objective function at the minimum
-  f <- func(theta,...)
+  f <- func(theta, ...)
   # inverse of the Hessian matrix at the minimum
-  Hi <- chol2inv(chol(hess))
+  Hi <- chol2inv(chol(hess_val))
   # gradient vector at the minimum
-  g <- grad(theta,...)
+  g <- grad(theta, ...)
   
   # we are returning a list containing the above three variables f, Hi, g and
   # the following:
