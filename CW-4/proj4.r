@@ -104,7 +104,21 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
     cat("Number of max half:", check_max_half, "Number of iterations:", iterations)
     cat("",theta, " ", func(theta), "\n")
   }
-  #return(list(f0,theta, iterations,grad))
+  
+  # value of the objective function at the minimum
+  f <- func(theta)
+  # inverse of the Hessian matrix at the minimum
+  Hi <- chol2inv(chol(hess))
+  # gradient vector at the minimum
+  g <- grad(theta)
+  
+  # we are returning a list containing the above three variables f, Hi, g and
+  # the following:
+  # iter - number of iterations taken to reach the minimum
+  # theta - value of the parameters at the minimum
+  return_vals <- list(f=f, theta=theta, iter=iterations, g=g, Hi=Hi)
+  
+  return(return_vals)
 }
 
 # RUN CODE UNDER THIS
