@@ -29,7 +29,7 @@
 #              provided
 # OUTPUT: A hessian matrix 
 # PURPOSE: this helper function approximates the Hessian matrix using
-# finite differencing
+#          finite differencing
 finite_diff_hess <- function(theta, grad, eps, ...){
   
   # get length of vector of parameter values
@@ -78,14 +78,6 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
     warning("objective or derivatives are not finite at the initial theta")
   }
   
-  # check if hessian matrix function is not provided
-  # if it is not, we obtain an approximation to the Hessian matrix function by 
-  # performing finite differencing of the gradient vector 
-  if (is.null(hess)) {
-    warning('Hessian Matrix not provided, approximation provided')
-    hess <- finite_diff_hess(theta, grad, eps, ...)
-  }
-  
   # initializing the number of iterations count
   iterations <- 0
   # Convergence should be judged by seeing whether all elements of the gradient 
@@ -103,8 +95,16 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
     if(iterations > maxit) {
       stop("Iteration limit reached without convergence!")
     }
-    # Hessian matrix with initial theta values
-    hess_val <- hess(theta, ...)
+    # check if hessian matrix function is not provided
+    # if it is not, we obtain an approximation to the Hessian matrix function by 
+    # performing finite differencing of the gradient vector 
+    if (is.null(hess)) {
+      #warning('Hessian Matrix not provided, approximation provided')
+      hess_val <- finite_diff_hess(theta, grad, eps, ...)
+    }
+    else {
+      hess_val <- hess(theta, ...)
+    }
     # perturbation value to force hessian to be positive definite
     perturb_val <- 0
     # count for the number of times the step was halved
@@ -182,4 +182,4 @@ hb <- function(th,k=2) {
   h
 }
 
-newt(theta= c(2,2), func=rb, grad=gb, hess=hb, fscale=0)
+newt(theta= c(-.5,1), func=rb, grad=gb, hess=hb, fscale=0)
