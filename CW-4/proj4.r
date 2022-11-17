@@ -85,26 +85,18 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
     }
     # Hessian matrix with initial theta values
     hess_val <- hess(theta, ...)
-    # compute eigen values of hessian matrix
-    eig_values <- eigen(hess_val)$values
     # perturbation value to force hessian to be positive definite
-    preturb_val <- 0
+    perturb_val <- 0
     # count for the number of times the step was halved
     check_max_half <- 0
-    # while loop that 
-    # while loop until any eigenvalue is negative
-    while (any(eig_values < 0)) {
+    # while loop that deals with non-postive hessian matrix and perturbs it
+    while(inherits(try(chol(hess_val), TRUE), "try-error")) {
       # add a multiple of the identity matrix, which we use later
-      preturb_val <- preturb_val + 1
+      perturb_val <- perturb_val + 1
       # new Hessian matrix with perturbation
-      new_hess <- hess_val + preturb_val*diag(n)
-      # new eigen values to be checked
-      eig_values <- eigen(new_hess)$values
+      hess_val <- hess_val + perturb_val*diag(n)
     }
     
-    #if(hessian not +ve definite at convergence) stop("Hessian is notpositive definite at convergence")
-    
-    hess_val <- hess_val + preturb_val*diag(n)
     # A descent direction is one in which a sufficiently small step will 
     # decrease the objective function
     delta <- -chol2inv(chol(hess_val)) %*% grad(theta, ...)
@@ -128,6 +120,7 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
   }
   # value of the objective function at the minimum
   f <- func(theta, ...)
+  #if(hessian not +ve definite at convergence) stop("Hessian is notpositive definite at convergence")
   # inverse of the Hessian matrix at the minimum
   Hi <- chol2inv(chol(hess_val))
   # gradient vector at the minimum
@@ -162,7 +155,7 @@ hb <- function(th,k=2) {
   h[1,2] <- h[2,1] <- -4*k*th[1]
   h
 }
-if(inherits(try(chol(hb(theta)), TRUE), "try-error")) {
-  warning("ye")
-}
-#newt(theta= c(2,2), func=rb, grad=gb, fscale=0)
+#if(inherits(try(chol(hb(theta)), TRUE), "try-error")) {
+#  warning("ye")
+#}
+newt(theta= c(2,2), func=rb, grad=gb, hess=hb, fscale=0)
