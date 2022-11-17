@@ -8,6 +8,7 @@
 # grad -> gradient function , eps -> the finite difference intervals when hessian
 #function is not provided
 #OUTPUT: A hessian matrix 
+#PURPOSE:
 finite_diff_hess <- function(theta, grad, eps, ...){
   
   # get length of vector of parameter values
@@ -39,6 +40,7 @@ finite_diff_hess <- function(theta, grad, eps, ...){
 #max.half ->max amount of times step can be halved
 #eps -> the finite difference intervals when hessian
 #OUTPUT: the minimized function
+#PURPOSE:
 
 # possible values for theta when func = rb => c(-.5,1)
 newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1, 
@@ -87,6 +89,9 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
       # new eigen values to be checked
       eig_values <- eigen(new_hess)$values
     }
+    
+    #if(hessian not +ve definite at convergence) stop("Hessian is notpositive definite at convergence")
+    
     hess_val <- hess_val + preturb_val*diag(n)
     # A descent direction is one in which a sufficiently small step will 
     # decrease the objective function
@@ -95,7 +100,7 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
     while (func(theta + delta, ...) >= func(theta, ...)) {
       # update the count for number of times step size is halved
       check_max_half <- check_max_half + 1
-      if(check_max_half>20) {
+      if(check_max_half>max.half) {
         stop('Step has failed to improve the objective!')
       }
       # halve step size
@@ -146,4 +151,4 @@ hb <- function(th,k=2) {
   h
 }
 
-#newt(theta= c(1000,-237), func=rb, grad=gb, hess=hb, fscale=0)
+newt(theta= c(2,2), func=rb, grad=gb, fscale=0)
