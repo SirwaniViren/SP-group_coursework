@@ -120,9 +120,15 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
   }
   # value of the objective function at the minimum
   f <- func(theta, ...)
-  #if(hessian not +ve definite at convergence) stop("Hessian is notpositive definite at convergence")
-  # inverse of the Hessian matrix at the minimum
-  Hi <- chol2inv(chol(hess_val))
+  if(inherits(try(chol(hb(theta)), TRUE), "try-error")){
+    warning("Hessian is not positive definite at convergence")
+    
+  }
+  else{
+    # inverse of the Hessian matrix at the minimum
+    Hi <- chol2inv(chol(hess_val))
+  }
+
   # gradient vector at the minimum
   g <- grad(theta, ...)
   
@@ -155,7 +161,5 @@ hb <- function(th,k=2) {
   h[1,2] <- h[2,1] <- -4*k*th[1]
   h
 }
-#if(inherits(try(chol(hb(theta)), TRUE), "try-error")) {
-#  warning("ye")
-#}
+
 newt(theta= c(2,2), func=rb, grad=gb, hess=hb, fscale=0)
