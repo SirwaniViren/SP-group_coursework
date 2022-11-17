@@ -46,7 +46,7 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
   
   # check if the objective or derivatives are not finite at the initial theta
   # a warning is issued if that is the case
-  if (abs(func(theta,...)) == Inf | any(abs(grad(theta,...))) == Inf){
+  if (abs(func(theta,...)) == Inf | any(abs(grad(theta,...)) == Inf)){
     warning("objective or derivatives are not finite at the initial theta")
   }
   
@@ -54,7 +54,6 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
   # if it is not, we obtain an approximation to the Hessian matrix function by 
   # performing finite differencing of the gradient vector 
   if (is.null(hess)) {
-    #print("fdfd")
     warning('Hessian Matrix not provided, approximation provided')
     hess <- finite_diff_hess(theta, grad, eps)
   }
@@ -64,7 +63,7 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
   # Convergence should be judged by seeing whether all elements of the gradient 
   # vector have absolute value less than tol times the absolute value of the 
   # objective function plus fscale 
-  conv_thresh <- tol * (abs(func(theta,...f)) + fscale)
+  conv_thresh <- tol * (abs(func(theta,...)) + fscale)
   
   # while loop runs till convergence is not achieved
   while (any(abs(grad(theta)) > (conv_thresh))) {
@@ -144,11 +143,3 @@ hb <- function(th,k=2) {
   h[1,2] <- h[2,1] <- -4*k*th[1]
   h
 }
-tol = 1e-8
-# optimum value for rb is 0
-fscale = 0
-eps = 1e-6
-theta = c(-.5, 1)
-n <- length(theta)
-obj_func_at_theta <- rb(theta)
-iterations <- 0
