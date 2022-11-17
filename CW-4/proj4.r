@@ -121,7 +121,8 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
     # decrease the objective function
     delta <- -chol2inv(chol(hess_val)) %*% grad(theta, ...)
     # while loop to halve step size until objective function decreases
-    while (func(theta + delta, ...) >= func(theta, ...)) {
+    while (func(theta + delta, ...) >= func(theta, ...) 
+           | !(is.finite(func(theta + delta)))) {
       # update the count for number of times step size is halved
       check_max_half <- check_max_half + 1
       if(check_max_half > max.half) {
