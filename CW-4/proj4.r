@@ -75,6 +75,7 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
   # objective function plus fscale 
   conv_thresh <- tol * (abs(func(theta, ...)) + fscale)
   
+  # get length of vector of parameter values
   n <- length(theta)
   
   # while loop runs till convergence is not achieved
