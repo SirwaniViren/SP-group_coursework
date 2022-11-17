@@ -28,7 +28,8 @@
 #        eps -> the finite difference intervals when hessian function is not 
 #              provided
 # OUTPUT: A hessian matrix 
-# PURPOSE: 
+# PURPOSE: this helper function approximates the Hessian matrix using
+#          finite differencing
 finite_diff_hess <- function(theta, grad, eps, ...){
   
   # get length of vector of parameter values
@@ -64,7 +65,9 @@ finite_diff_hess <- function(theta, grad, eps, ...){
 #         the value of the parameters at the minimum, the number of iterations 
 #         taken to reach the minimum, g the gradient vector at the minimum, 
 #         and the inverse of the Hessian matrix at the minimum
-# PURPOSE: 
+# PURPOSE: this optimization function implements Newton’s method for
+#          minimization of functions. The function issues error/warnings 
+#          in various different cases. 
 
 newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1, 
                  maxit = 100, max.half = 20, eps = 1e-6) {
@@ -118,7 +121,8 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
     # decrease the objective function
     delta <- -chol2inv(chol(hess_val)) %*% grad(theta, ...)
     # while loop to halve step size until objective function decreases
-    while (func(theta + delta, ...) >= func(theta, ...)) {
+    while (func(theta + delta, ...) >= func(theta, ...) 
+           | !(is.finite(func(theta + delta)))) {
       # update the count for number of times step size is halved
       check_max_half <- check_max_half + 1
       if(check_max_half > max.half) {
