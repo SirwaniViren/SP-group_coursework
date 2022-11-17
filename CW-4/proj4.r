@@ -100,6 +100,9 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
       # new eigen values to be checked
       eig_values <- eigen(new_hess)$values
     }
+    
+    #if(hessian not +ve definite at convergence) stop("Hessian is notpositive definite at convergence")
+    
     hess_val <- hess_val + preturb_val*diag(n)
     # A descent direction is one in which a sufficiently small step will 
     # decrease the objective function
@@ -159,4 +162,4 @@ hb <- function(th,k=2) {
   h
 }
 
-#newt(theta= c(1000,-237), func=rb, grad=gb, hess=hb, fscale=0)
+#newt(theta= c(2,2), func=rb, grad=gb, fscale=0)
