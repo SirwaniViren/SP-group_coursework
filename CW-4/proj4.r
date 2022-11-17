@@ -2,12 +2,18 @@
 # Viren Sirwani Mulani s1949143
 # Alannah Hounat s2434943
 
-# Git repo Link: https://github.com/SirwaniViren/SP-group_coursework/tree/main/CW-4
+# Git repo Link: 
+#     https://github.com/SirwaniViren/SP-group_coursework/tree/main/CW-4
 
-#INPUT: theta -> initial values for optimization parameters
-# grad -> gradient function , eps -> the finite difference intervals when hessian
-#function is not provided
-#OUTPUT: A hessian matrix 
+# Overview of code:
+#
+
+# INPUT: theta -> initial values for optimization parameters,
+#       grad -> gradient function, 
+#       eps -> the finite difference intervals when hessian function is not 
+#              provided
+# OUTPUT: A hessian matrix 
+# PURPOSE: 
 finite_diff_hess <- function(theta, grad, eps, ...){
   
   # get length of vector of parameter values
@@ -31,14 +37,19 @@ finite_diff_hess <- function(theta, grad, eps, ...){
   return (hess)
 }
 
-#INPUT: theta -> initial values for optimization parameters, 
-#func-> objective function to minimize, grad -> gradient function
-#hess-> hessian matrix function, tol-> convergence tolerance, 
-#fscale-> estimate of magnitude of func near optimum
-#maxit-> max amount of iterations to perform , 
-#max.half ->max amount of times step can be halved
-#eps -> the finite difference intervals when hessian
-#OUTPUT: the minimized function
+# INPUT: theta -> initial values for optimization parameters, 
+#       func-> objective function to minimize, grad -> gradient function
+#       hess-> hessian matrix function, tol-> convergence tolerance, 
+#       fscale-> estimate of magnitude of func near optimum
+#       maxit-> max amount of iterations to perform , 
+#       max.half ->max amount of times step can be halved
+#       eps -> the finite difference intervals when hessian
+# OUTPUT: a list defining the optimized functions.
+#         The list contains the value of the optimized function at the minimum,
+#         the value of the parameters at the minimum, the number of iterations 
+#         taken to reach the minimum, g the gradient vector at the minimum, 
+#         and the inverse of the Hessian matrix at the minimum
+# PURPOSE: 
 
 # possible values for theta when func = rb => c(-.5,1)
 newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1, 
@@ -46,7 +57,7 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
   
   # check if the objective or derivatives are not finite at the initial theta
   # a warning is issued if that is the case
-  if (abs(func(theta, ...)) == Inf | any(abs(grad(theta, ...)) == Inf)){
+  if (!is.finite(abs(func(theta, ...))) | any(!is.finite(abs(grad(theta, ...))))) {
     warning("objective or derivatives are not finite at the initial theta")
   }
   
@@ -69,7 +80,9 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
   while (any(abs(grad(theta, ...)) > (conv_thresh))) {
     # increase number of iterations by one
     iterations <- iterations + 1
-    if(iterations > maxit) stop("Iteration limit reached without convergence!")
+    if(iterations > maxit) {
+      stop("Iteration limit reached without convergence!")
+    }
     # Hessian matrix with initial theta values
     hess_val <- hess(theta, ...)
     # compute eigen values of hessian matrix
@@ -95,7 +108,7 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
     while (func(theta + delta, ...) >= func(theta, ...)) {
       # update the count for number of times step size is halved
       check_max_half <- check_max_half + 1
-      if(check_max_half>20) {
+      if(check_max_half > max.half) {
         stop('Step has failed to improve the objective!')
       }
       # halve step size
