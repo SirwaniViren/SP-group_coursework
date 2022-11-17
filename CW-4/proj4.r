@@ -4,21 +4,29 @@
 
 # Git repo Link: https://github.com/SirwaniViren/SP-group_coursework/tree/main/CW-4
 
-#INPUT: theta -> initial values for optinisation parameters
+#INPUT: theta -> initial values for optimization parameters
 # grad -> gradient function , eps -> the finite difference intervals when hessian
 #function is not provided
 #OUTPUT: A hessian matrix 
 finite_diff_hess <- function(theta, grad, eps, ...){
-  grad <- gb
+  
+  # get length of vector of parameter values
   n <- length(theta)
-  grad0 <- grad(theta) ## grad of nll at th0
+  # gradient function at the initial theta
+  grad0 <- grad(theta)
+  # finite diference Hessian, we first need to initialize it
   hess_temp <- matrix(0, n, n)
   for(i in 1:n){
-    th1 <- theta; th1[i] <- th1[i] + eps ## increase th1[i] by eps
-    grad1 <- grad(th1) ## compute resulting nll
-    hess_temp[i,] <- (grad1 - grad0)/eps ## approximate second derivs
+    # just make a copy of theta
+    # and also increase th1[i] by eps
+    th1 <- theta; th1[i] <- th1[i] + eps 
+    # compute resulting gradient function
+    grad1 <- grad(th1)
+    # approximate second derivatives
+    hess_temp[i,] <- (grad1 - grad0)/eps 
   }
   
+  # use the fact that t(A)+A)/2 is exactly symmetric for any matrix A
   hess <- (t(hess_temp) + hess_temp)/2
   return (hess)
 }
@@ -35,7 +43,7 @@ finite_diff_hess <- function(theta, grad, eps, ...){
 # possible values for theta when func = rb => c(-.5,1)
 newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1, 
                  maxit = 100, max.half = 20, eps = 1e-6) {
-  n <- length(theta)
+
   # check if hessian matrix function is not provided
   # if it is not, we obtain an approximation to the Hessian matrix function by 
   # performing finite differencing of the gradient vector 
