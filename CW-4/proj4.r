@@ -5,6 +5,21 @@
 # Git repo Link: 
 #     https://github.com/SirwaniViren/SP-group_coursework/tree/main/CW-4
 
+# Team member contributions to project:
+# Question involved the collaboration of multiple members of the group.
+
+# The questions that were done individually are shown below:
+
+# Viren Sirwani Mulani s1949143: Was in charge of the majority of commenting.
+# Created helper function to approximate Hessian matrix using finite differencing.
+# Fixed return of newt values. Involved in error handling.
+
+# Karman Singh s1936373: Wrote the bulk of newt function. Was also involved in
+# error handling.
+
+# Alannah Hounat s2434943: Was in charge of most of the error handling. Created 
+# function to test Hessian matrix. Wrote overview of code.
+
 # Overview of code:
 #
 
