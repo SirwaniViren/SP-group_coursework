@@ -91,6 +91,7 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
     preturb_val <- 0
     # count for the number of times the step was halved
     check_max_half <- 0
+    # while loop that 
     # while loop until any eigenvalue is negative
     while (any(eig_values < 0)) {
       # add a multiple of the identity matrix, which we use later
@@ -161,5 +162,7 @@ hb <- function(th,k=2) {
   h[1,2] <- h[2,1] <- -4*k*th[1]
   h
 }
-
+if(inherits(try(chol(hb(theta)), TRUE), "try-error")) {
+  warning("ye")
+}
 #newt(theta= c(2,2), func=rb, grad=gb, fscale=0)
