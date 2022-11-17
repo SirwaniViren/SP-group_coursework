@@ -31,11 +31,11 @@ finite_diff_hess <- function(theta, grad, eps, ...){
   return (hess)
 }
 
-#INPUT: theta -> initial values for optinisation parameters, 
+#INPUT: theta -> initial values for optimization parameters, 
 #func-> objective function to minimize, grad -> gradient function
 #hess-> hessian matrix function, tol-> convergence tolerance, 
 #fscale-> estimate of magnitude of func near optimum
-#maxit-> max amount of interations to perform , 
+#maxit-> max amount of iterations to perform , 
 #max.half ->max amount of times step can be halved
 #eps -> the finite difference intervals when hessian
 #OUTPUT: the minimized function
@@ -57,6 +57,7 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
     print("fdfd")
     hess <- finite_diff_hess(theta, grad, eps)
   }
+  
   # initializing the number of iterations count
   iterations <- 0
   # Convergence should be judged by seeing whether all elements of the gradient 
@@ -66,23 +67,39 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
   
   # while loop runs till convergence is not achieved
   while (any(abs(grad(theta)) > (conv_thresh))) {
+    # increase number of iterations by one
     iterations <- iterations + 1
+    # Hessian matrix with initial theta values
     hess_val <- hess(theta)
+    # compute eigen values of hessian matrix
     eig_values <- eigen(hess_val)$values
+    # perturbation value to force hessian to be positive definite
     preturb_val <- 0
+    # count for the number of times the step was halved
     check_max_half <- 0
+    # while loop until any eigenvalue is negative
     while (any(eig_values < 0)) {
+      # add a multiple of the identity matrix, which we use later
       preturb_val <- preturb_val + 1
+      # new Hessian matrix with perturbation
       new_hess <- hess_val + preturb_val*diag(n)
+      # new eigen values to be checked
       eig_values <- eigen(new_hess)$values
     }
     hess_val <- hess_val + preturb_val*diag(n)
+    # A descent direction is one in which a sufficiently small step will 
+    # decrease the objective function
     delta <- -chol2inv(chol(hess_val)) %*% grad(theta)
+    # while loop to halve step size until objective function decreases
     while (func(theta + delta) >= func(theta)) {
+      # update the count for number of times step size is halved
       check_max_half <- check_max_half + 1
+      # halve step size
       delta <- delta/2
     }
+    # transpose of delta
     delta_t <- t(delta)
+    # update optimization values
     theta <- theta + delta
     cat("Number of max half:", check_max_half, "Number of iterations:", iterations)
     cat("",theta, " ", func(theta), "\n")
