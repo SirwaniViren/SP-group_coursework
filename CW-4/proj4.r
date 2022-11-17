@@ -21,31 +21,34 @@
 # function to test Hessian matrix. Wrote overview of code.
 
 # Overview of code: Newton's method is an optimization method based on 
-# iteratively approximating a function by a truncated taylor expansion and
+# iteratively approximating a function by a truncated Taylor expansion and
 # finding the minimum of the approximation at each step. Given an initial vector 
 # of optimization parameters (theta), an objective function (func) to minimize
 # and the gradient vector (grad) of the objective function, the function newt
 # implements Newton’s method for minimization of functions. The hess function 
-# returns Hessian matrix of the objective w.r.t. the elements of parameter vector. 
-# Within the newt function
-# it will iterate up to "maxit" times before it gives up and max.half which is 
-# the max amount of times a step should be be halved before concluding that the 
-# step has failed to improve the objective. The newt function will also return 
-# a list containing f the value of the objective function at the minimum.
-# theta -> value of the parameters at the minimum.
+# returns Hessian matrix of the objective w.r.t. the elements of parameter 
+# vector. 
+# Within the newt function it will iterate up to "maxit" times before it gives 
+# up and max.half which is the max amount of times a step should be be halved 
+# before concluding that the step has failed to improve the objective. 
+# The newt function will also return a list containing :
+# f the value of the objective function at the minimum, 
+# theta -> value of the parameters at the minimum, 
 # iter -> number of iterations taken to reach the minimum.
 # g ->the gradient vector at the minimum (so the user can judge closeness to 
 # numerical zero).
-# Hi -> the inverse of the Hessian matrix at the minimum (useful if the objective
-# is a negative log likelihood).
-# The function will also return various warnings/stops in certain cases, such as:
+# Hi -> the inverse of the Hessian matrix at the minimum (useful if the 
+# objective is a negative log likelihood).
+
+# The function will also return various warnings/stops in certain cases, 
+# such as:
 # Case 1: If the objective or derivatives are not finite at the initial theta
 # Case 2: If the step fails to reduce the objective despite trying max.half step 
-# halving
+#         halving
 # Case 3: If maxit is reached without convergence
 # Case 4: If the Hessian is not positive definite at convergence
-# Case 5: If the Hessian Matrix is not provided to tell the user an approximation
-# will be provided
+# Case 5: If the Hessian Matrix is not provided to tell the user an 
+#         approximation will be provided
 
 # INPUT: theta -> initial values for optimization parameters,
 #        grad -> gradient function, 
@@ -99,6 +102,10 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
   # a warning is issued if that is the case
   if (!is.finite(abs(func(theta, ...))) | any(!is.finite(abs(grad(theta, ...))))) {
     warning("objective or derivatives are not finite at the initial theta")
+  }
+  
+  if (is.null(hess)) {
+    #warning('Hessian Matrix not provided, approximation provided')
   }
   
   # initializing the number of iterations count
