@@ -31,7 +31,6 @@
 # PURPOSE: this helper function approximates the Hessian matrix using
 #          finite differencing
 finite_diff_hess <- function(theta, grad, eps, ...){
-  
   # get length of vector of parameter values
   n <- length(theta)
   # gradient function at the initial theta
@@ -142,7 +141,7 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
   #if hessian is not positive definite at convergence give an error
   if(inherits(try(chol(hb(theta)), TRUE), "try-error")){
     warning("Hessian is not positive definite at convergence")
-    Hi<-NULL
+    Hi <- NULL
   }
   else{
     # inverse of the Hessian matrix at the minimum
