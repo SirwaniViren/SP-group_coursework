@@ -120,9 +120,10 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
   }
   # value of the objective function at the minimum
   f <- func(theta, ...)
+  #if hessian is not positive definite at convergence give an error
   if(inherits(try(chol(hb(theta)), TRUE), "try-error")){
     warning("Hessian is not positive definite at convergence")
-    
+    Hi<-NULL
   }
   else{
     # inverse of the Hessian matrix at the minimum
