@@ -9,8 +9,8 @@
 #
 
 # INPUT: theta -> initial values for optimization parameters,
-#       grad -> gradient function, 
-#       eps -> the finite difference intervals when hessian function is not 
+#        grad -> gradient function, 
+#        eps -> the finite difference intervals when hessian function is not 
 #              provided
 # OUTPUT: A hessian matrix 
 # PURPOSE: 
@@ -38,12 +38,12 @@ finite_diff_hess <- function(theta, grad, eps, ...){
 }
 
 # INPUT: theta -> initial values for optimization parameters, 
-#       func-> objective function to minimize, grad -> gradient function
-#       hess-> hessian matrix function, tol-> convergence tolerance, 
-#       fscale-> estimate of magnitude of func near optimum
-#       maxit-> max amount of iterations to perform , 
-#       max.half ->max amount of times step can be halved
-#       eps -> the finite difference intervals when hessian
+#        func-> objective function to minimize, grad -> gradient function
+#        hess-> hessian matrix function, tol-> convergence tolerance, 
+#        fscale-> estimate of magnitude of func near optimum
+#        maxit-> max amount of iterations to perform , 
+#        max.half ->max amount of times step can be halved
+#        eps -> the finite difference intervals when hessian
 # OUTPUT: a list defining the optimized functions.
 #         The list contains the value of the optimized function at the minimum,
 #         the value of the parameters at the minimum, the number of iterations 
@@ -51,7 +51,6 @@ finite_diff_hess <- function(theta, grad, eps, ...){
 #         and the inverse of the Hessian matrix at the minimum
 # PURPOSE: 
 
-# possible values for theta when func = rb => c(-.5,1)
 newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1, 
                  maxit = 100, max.half = 20, eps = 1e-6) {
   
@@ -75,6 +74,8 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
   # vector have absolute value less than tol times the absolute value of the 
   # objective function plus fscale 
   conv_thresh <- tol * (abs(func(theta, ...)) + fscale)
+  
+  n <- length(theta)
   
   # while loop runs till convergence is not achieved
   while (any(abs(grad(theta, ...)) > (conv_thresh))) {
@@ -115,8 +116,6 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
     # update optimization values
     theta <- theta + delta
     conv_thresh <- tol * (abs(func(theta,...)) + fscale)
-    cat("Number of max half:", check_max_half, "Number of iterations:", iterations)
-    cat("",theta, " ", func(theta,...), "\n")
   }
   # value of the objective function at the minimum
   f <- func(theta, ...)
@@ -137,7 +136,7 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
   # the following:
   # iter - number of iterations taken to reach the minimum
   # theta - value of the parameters at the minimum
-  return_vals <- list(f=f, theta=theta, iter=iterations, g=g, Hi=Hi)
+  return_vals <- list(f = f, theta = theta, iter = iterations, g = g, Hi = Hi)
   
   return(return_vals)
 }
