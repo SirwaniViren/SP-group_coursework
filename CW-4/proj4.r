@@ -102,6 +102,7 @@ newt <- function(theta, func, grad, hess = NULL,..., tol = 1e-8, fscale = 1,
     delta_t <- t(delta)
     # update optimization values
     theta <- theta + delta
+    conv_thresh <- tol * (abs(func(theta)) + fscale)
     cat("Number of max half:", check_max_half, "Number of iterations:", iterations)
     cat("",theta, " ", func(theta, ...), "\n")
   }
